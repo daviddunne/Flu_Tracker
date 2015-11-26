@@ -1,0 +1,51 @@
+html {
+
+}
+body{
+    background: url("/static/images/bg.png") no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+.header{
+    width:100%;
+    height: 50px;
+    margin-bottom:5px;
+    border-bottom-style:solid;
+    border-bottom-width:1px;
+    border-color:#ff6600;
+    background-color: #FFF;
+    box-shadow: 10px 10px 5px rgba(136, 136, 136, 0.48);
+}
+.titleCaption{
+    height: 100%;
+    width:30%;
+    padding-top:2px;
+    padding-left:50px;
+    float:left;
+}
+.navigation{
+    padding-top:5px;
+    width:65%;
+    float:right;
+}
+H1{
+    color:#ff6600;
+    font-size:150%;
+}
+.main_content_pane{
+    width:100%;
+    margin-top:95px;
+    padding-left:10px;
+    padding-right:10px;
+    text-align: justify;
+}
+#footer {
+    position:fixed;
+    left:0px;
+    bottom:0px;
+    height:30px;
+    width:100%;
+    text-align:center;
+}

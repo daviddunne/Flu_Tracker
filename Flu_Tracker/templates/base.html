@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" media="screen" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" >
+    <link rel="stylesheet" media="screen" href="{{ url_for('static', filename='css/main.css') }}" >
+    <meta charset="UTF-8">
+    <title>{{ the_title }}</title>
+</head>
+<body>
+    <div class="container">
+         {% block body %}
+         {% endblock %}
+        <div id = "footer">Copyright &copy; 2015 by David Dunne.</div>
+    </div>
+</body>
+</html>
