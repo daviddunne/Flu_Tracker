@@ -1,0 +1,94 @@
+#map_container {
+    width:100%;
+    height: 500px;
+}
+#search_map_filters{
+    width:100%;
+    margin-top:20px;
+}
+#zoom_filter_area{
+    height: 40px;
+    width:32%;
+    background-color: rgba(173, 170, 169, 0.29);
+    margin-bottom:5px;
+    border-radius:5px;
+    padding:5px 5px 5px 5px;
+    float:right;
+    margin-left:10px;
+}
+#zoom_filter_area .mapBtn{
+    width:33%;
+}
+#zoom_filter_area .filterLabel{
+    width:25%;
+}
+
+#time_filter_area{
+    height: 40px;
+    width:32%;
+    float:right;
+    margin-left:2%;
+    background-color: rgba(173, 170, 169, 0.29);
+    margin-bottom:5px;
+    border-radius:5px;
+    text-align:center;
+    padding:5px 5px 5px 5px;
+}
+#time_filter_area .filter_input{
+    width:60%;
+}
+#search_filter_area{
+    height: 40px;
+    width:32%;
+    float:left;
+    background-color: rgba(173, 170, 169, 0.29);
+    margin-bottom:5px;
+    border-radius:5px;
+    padding:5px 5px 5px 5px;
+}
+.filterLabel{
+    width:33%;
+    float:left;
+    margin-top:5px;
+}
+.filter_input{
+    float:left;
+    width:200px;
+    height:30px;
+    background-color: rgba(173, 170, 169, 0.29);
+    border-color: #f0ad4e;
+
+}
+#searchmap{
+    float:left;
+    width:60%;
+    height:30px;
+    color: #fff;
+    margin-right:5px;
+    margin-bottom:10px;
+    background-color: rgba(173, 170, 169, 0.29);
+    border-color: #f0ad4e;
+}
+#searchMapBtn{
+    width:33%;
+}
+.mapBtn{
+    background-color: rgba(173, 170, 169, 0.29);
+    border-color: #f0ad4e;
+    float:left;
+    height:30px;
+    margin-right:10px;
+}
+
+.mapBtn:hover,
+.mapBtn:focus,
+.mapBtn.focus{
+    color: #fff;
+    background-color: #ec971f;
+    border-color: #d58512;
+}
+.mapBtn:active {
+    color: #fff;
+    background-color: #ec971f;
+    border-color: #fff;
+}

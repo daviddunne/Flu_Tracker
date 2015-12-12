@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+      <link rel="stylesheet" type="text/css" href="static/css/mapdiv_style.css"/>
+      <script type="text/javascript" src="{{ url_for('static', filename ='js/google_heat_map_points.js')}}"></script>
     <!-- Basic Page Needs
     ================================================== -->
+    <link rel="stylesheet" type="text/css" href="static/css/mapdiv_style.css"/>
     <meta charset="utf-8">
     <!--[if IE]><meta http-equiv="x-ua-compatible" content="IE=9" /><![endif]-->
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,7 +17,7 @@
     <!-- Favicons
     ================================================== -->
     <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico')}}" type="image/x-icon">
-    <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/apple-touch-icon.png')}}">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='/img/apple-touch-icon.png')}}">
     <link rel="apple-touch-icon" sizes="72x72" href="{{ url_for('static', filename='img/apple-touch-icon-72x72.png')}}">
     <link rel="apple-touch-icon" sizes="114x114" href="{{ url_for('static', filename='img/apple-touch-icon-114x114.png')}}">
 
@@ -26,6 +29,20 @@
     ================================================== -->
     <link href="{{ url_for('static', filename='css/owl.carousel.css')}}" rel="stylesheet" media="screen">
     <link href="{{ url_for('static', filename='css/owl.theme.css')}}" rel="stylesheet" media="screen">
+
+    <!-- Google Map Heatmap
+    ================================================== -->
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?
+        key=AIzaSyDoTep3hq7DQR8takQhFVM1YVyzvXOLbLA&libraries=visualization"></script>
+    <!-- Data for heatmap -->
+
+    <script type="text/javascript" src="{{ url_for('static', filename ='js/google_heat_map.js')}}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename ='js/mapPoints.js')}}"></script>
+      <script type="text/javascript" src="{{ url_for('static', filename ='js/mapMonthPoints.js')}}"></script>
+      <script type="text/javascript" src="{{ url_for('static', filename ='js/mapWeekPoints.js')}}"></script>
+      <script type="text/javascript" src="{{ url_for('static', filename ='js/mapDayPoints.js')}}"></script>
+   <!-- <script type ="text/javascript" src = "/static/js/mapPoints.js"></script>
+    <script type ="text/javascript" src = "/static/js/google_heat_map.js"></script>
 
     <!-- Stylesheet
     ================================================== -->
@@ -44,7 +61,7 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
-  <body>
+  <body onload="initMap()">
     <!-- Navigation
     ==========================================-->
     <nav id="tf-menu" class="navbar navbar-default navbar-fixed-top on">
@@ -99,7 +116,6 @@
                 <div class="col-md-6">
                     <div class="about-text">
                         <div class="section-title">
-                            <h4>About</h4>
                             <h2>Some words <strong>about the project</strong></h2>
                             <hr>
                             <div class="clearfix"></div>
@@ -107,6 +123,7 @@
                         <p class="intro">Influenza is a contagious illness that attacks the respiratory organs and in doing so claims the lives of many people throughout the world yearly.</p>
                         <p class="intro">In this modern age of connectivity and information sharing, is it possible to make use of social media to track instances of Influenza?
                                           This project was set up in order to research this possibility.</p>
+                        <!--
                         <ul class="about-list">
                             <li>
                                 <span class="fa fa-dot-circle-o"></span>
@@ -114,7 +131,7 @@
                             </li>
                             <li>
                                 <span class="fa fa-dot-circle-o"></span>
-                                <strong>Processing</strong> - <em>Develop a machine learning to filter out unwanted data</em>
+                                <strong>Processing</strong> - <em>Make use of Natural Language Toolkit (NLTK) to filter out unwanted data</em>
                             </li>
                             <li>
                                 <span class="fa fa-dot-circle-o"></span>
@@ -124,25 +141,66 @@
                                 <span class="fa fa-dot-circle-o"></span>
                                 <strong>Display</strong> - <em>Create a web interface to display the data</em>
                             </li>
-                        </ul>
+                        </ul> -->
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Flu-TrackR Visual --------
+    <!--=====================================
+        -------- Flu-TrackR Visual --------
     ==========================================-->
     <div id="tf-meetFluTrakR" class="text-center">
         <div class="overlay">
-            <div class="container">
+            <div class="container" style ="width:90%">
                 <div class="section-title center">
                     <h2>Meet <strong>Flu-TrackR</strong></h2>
                     <div class="line">
                         <hr>
-                        <div id ='globe_container'></div>
+
                     </div>
                 </div>
+                <!-- =====================================
+                        -------- Filters --------
+                ==========================================-->
+                <div id ="search_map_filters">
+
+                    <!-- Location Filter --------
+                    ==========================================-->
+                    <div id = "search_filter_area">
+                        <input type='text' name='searchmap' id='searchmap' placeholder='Search Location'>
+                        <input class = "mapBtn" id="searchMapBtn" type="button" value="Search"
+                               onclick="moveToLocation(document.getElementById('searchmap').value)">
+                    </div>
+
+                    <!-- =====================================
+                            -------- Time Filter --------
+                    ==========================================-->
+                    <div id = "time_filter_area">
+                        <div class = "filterLabel">Time Period:</div>
+                            <select id='time_filter' class='filter_input'onchange="updateHeatMap(this.value)">
+                                <option value="day">Last 24hrs</option>
+                                <option value="week">Last Week</option>
+                                <option value="month">Last Month</option>
+                                <option value = "all">All</option>
+                            </select>
+                        </div>
+                    </div>
+                     <!-- =====================================
+                            -------- Zoom Filter -------
+                    ========================================== -->
+                    <!-- TODO------add a zoom button to return to default -->
+                    <div id ="zoom_filter_area">
+                        <div class ="filterLabel">Zoom:</div>
+                        <input class = "mapBtn" id="zoomIn" type="button" value="+"
+                               onclick="zoomInOut(1)">
+                        <input class = "mapBtn" id="zoomOut" type="button" value="-"
+                               onclick="zoomInOut(-1)">
+                    </div>
+
+
+                <div id ='map_container'></div>
             </div>
         </div>
     </div>

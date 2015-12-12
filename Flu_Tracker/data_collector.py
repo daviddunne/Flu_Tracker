@@ -5,6 +5,7 @@ from tweepy.streaming import StreamListener
 from datetime import datetime
 import json
 from geopy.geocoders import Nominatim
+from geopy.exc import GeocoderTimedOut
 
 geolocator = Nominatim()
 
@@ -19,31 +20,45 @@ location_cache = {}
 
 class Listener(StreamListener):
 
-    banned_list = ['stomach', 'shot','jab', 'rt ', 'vaccinate', 'vaccine', 'vaccination' 'one direction', 'fda', 'https', '@', 'the priest thinks']
+    banned_word_list = ['stomach', 'rt ', 'one direction', 'https', '@', 'the priest thinks']
 
     def on_data(self, raw_data):
+        to_data_file = self.set_up_data_file()
         json_data = json.loads(raw_data)
         location, text, user_language = self.get_location_text_and_user_language_from_data(json_data)
 
         # Check is tweet is valid, english and does not contain banned words
-        if self.valid_tweet(location, text, user_language):
-            to_data_file = self.set_up_data_file()
-            if location != 'None':
-                # get geolocation object of user
-                geolocation = self.get_geolocation(location)
-                if geolocation != None:
-                    country = self.get_country(geolocation)
+        if self.valid_tweet(location, text, user_language) and location != 'None':
+        #ToDo remove location from validation check later add tweets with no location to database
+        # get geolocation object of user
+            geolocation = self.get_geolocation(location)
+            #ToDo check if losing data here when geolocation is returning None
+            if geolocation != None:
+                address = geolocation.address
+                latitude = geolocation.latitude
+                longitude= geolocation.longitude
 
-                    # Get time tweet created
-                    timestamp = json_data['created_at']
-                    user_id = json_data['user']['id_str']
+                # Get time tweet created
+                timestamp = json_data['created_at']
+                user_id = json_data['user']['id_str']
 
-                    # Cache the location for later use
-                    location_cache[location] = geolocation
-                    #data = timestamp + ', ' + user_id + ', ' + text + ', ' + location + ', ' + country
-                    data = text + ','
-                    print(data)
-                    #self.write(data, to_data_file)
+                # Cache the location for later use
+                location_cache[location] = geolocation
+                data = timestamp + ', ' + user_id + ', ' + text + ', ' + address + ', ' + str(latitude) + ', ' + str(longitude)
+                #ToDo remove this print function before deploying
+                print(data)
+                #ToDo Refactor this code to add to database not file and include time so can perform queries for up to date data
+                mapPoint = "\tnew google.maps.LatLng(" + str(latitude) + ", " + str(longitude) + "),"
+                datafilepath = "static/js/mapDayPoints.js"
+                file = open(datafilepath)
+                lines = file.readlines()
+                file.close()
+                lines = lines[:-1]
+                lines.append(mapPoint)
+                lines.append('\n];')
+                with open(datafilepath, 'w') as datafile:
+                    datafile.writelines([item for item in lines])
+                self.write(data, to_data_file)
 
     def get_country(self, location):
         address = location.address
@@ -92,9 +107,12 @@ class Listener(StreamListener):
             else:
                 # location not cached so fetch from geolocator
                 try:
-                    geolocation = geolocator.geocode(location)
+                    geolocation = geolocator.geocode(location, timeout=None)
                     location_cache[location] = geolocation
                     return geolocation
+                except GeocoderTimedOut as e:
+                    print(e.msg)
+                    return None
                 except:
                     return None
 
@@ -106,7 +124,7 @@ class Listener(StreamListener):
             return False
         if text == '':
             return False
-        for words in self.banned_list:
+        for words in self.banned_word_list:
             if words in text:
                 return False
         return True
