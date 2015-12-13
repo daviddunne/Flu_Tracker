@@ -115,21 +115,25 @@ function zoomInOut(value){
     zoomValue = zoomValue+value;
     if(zoomValue > maxZoomValue){
         map.setZoom(zoomValue);
-        (document.getElementById('zoomOut').value = '-')
     }
-    else(document.getElementById('zoomOut').value = 'max')
+    else(alert("Max Zoom Level Reached"))
 
 }
 
 // Double Click Function on Map
 function zoomInSmoothly(map, endZoom, startZoom) {
+
+
     if(endZoom < startZoom) {
+
         z = google.maps.event.addListener(map, 'zoom_changed', function (event) {
             google.maps.event.removeListener(z);
             zoomInSmoothly(map, endZoom, startZoom + 10);
         });
         setTimeout(function () {
             map.setZoom(startZoom)
+            //ToDo this not working, need to reset the value of button
+            (document.getElementById('zoomOut').value = '-');
         }, 500);
     }
 }

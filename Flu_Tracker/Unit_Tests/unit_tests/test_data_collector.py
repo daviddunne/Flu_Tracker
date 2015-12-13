@@ -9,7 +9,7 @@ class Data_Collector_Tests(unittest.TestCase):
         self.valid_location_mock = 'Ireland'
         self.invalid_location_mock = None
         self.valid_text_mock = "this is valid text because it conatins the word flu and no banned words"
-        self.invalid_text_mock = "this is invalid because it contains the word shot"
+        self.invalid_text_mock = "this is invalid because it contains the word rt for retweet"
         self.valid_language_mock = 'en'
         self.invalid_language_mock = 'rt'
         self.listener = data_collector.Listener()
@@ -23,8 +23,6 @@ class Data_Collector_Tests(unittest.TestCase):
     def test_get_geolocation(self):
         pass
 
-    def test_get_country(self):
-        pass
     def test_valid_tweet(self):
 
         self.assertTrue(self.listener.valid_tweet(self.valid_location_mock, self.valid_text_mock, self.valid_language_mock))

@@ -30,7 +30,7 @@ class Listener(StreamListener):
         # Check is tweet is valid, english and does not contain banned words
         if self.valid_tweet(location, text, user_language) and location != 'None':
         #ToDo remove location from validation check later add tweets with no location to database
-        # get geolocation object of user
+            # get geolocation object of user
             geolocation = self.get_geolocation(location)
             #ToDo check if losing data here when geolocation is returning None
             if geolocation != None:
@@ -59,15 +59,6 @@ class Listener(StreamListener):
                 with open(datafilepath, 'w') as datafile:
                     datafile.writelines([item for item in lines])
                 self.write(data, to_data_file)
-
-    def get_country(self, location):
-        address = location.address
-        last_comma_index = address.rfind(',')
-        if last_comma_index == -1:
-            return address
-        else:
-            last_word_index = last_comma_index + 2
-            return address[last_word_index:]
 
     def set_up_data_file(self):
         # Set up data file
@@ -111,7 +102,7 @@ class Listener(StreamListener):
                     location_cache[location] = geolocation
                     return geolocation
                 except GeocoderTimedOut as e:
-                    print(e.msg)
+                    print('error Timeout')
                     return None
                 except:
                     return None
