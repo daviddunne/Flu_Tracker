@@ -5,5 +5,5 @@ source venv/bin/activate
 echo "virtual environment activated"
 
 echo "Downloading requirements"
-pip install -r Flu_Tacker/requirements.txt
+pip install -r Flu_Tracker/requirements.txt
 echo "Requirements installed"
