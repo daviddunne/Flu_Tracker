@@ -6,4 +6,4 @@ echo "Directory changed"
 
 
 echo "Starting tests now"
-python3 -m discover
+python3 -m discover -v

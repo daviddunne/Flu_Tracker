@@ -30,19 +30,24 @@
     <link href="{{ url_for('static', filename='css/owl.carousel.css')}}" rel="stylesheet" media="screen">
     <link href="{{ url_for('static', filename='css/owl.theme.css')}}" rel="stylesheet" media="screen">
 
-    <!-- Google Map Heatmap
+    <!--JQUERY -->
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.1.11.1.js"></script>
+
+  <!-- Google Map Heatmap
     ================================================== -->
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?
         key=AIzaSyDoTep3hq7DQR8takQhFVM1YVyzvXOLbLA&libraries=visualization"></script>
+
+    <script type="text/javascript" src="{{ url_for('static', filename ='js/updateMap.js')}}"></script>
+
     <!-- Data for heatmap -->
 
     <script type="text/javascript" src="{{ url_for('static', filename ='js/google_heat_map.js')}}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename ='js/mapPoints.js')}}"></script>
-      <script type="text/javascript" src="{{ url_for('static', filename ='js/mapMonthPoints.js')}}"></script>
-      <script type="text/javascript" src="{{ url_for('static', filename ='js/mapWeekPoints.js')}}"></script>
-      <script type="text/javascript" src="{{ url_for('static', filename ='js/mapDayPoints.js')}}"></script>
-   <!-- <script type ="text/javascript" src = "/static/js/mapPoints.js"></script>
-    <script type ="text/javascript" src = "/static/js/google_heat_map.js"></script>
+    <script src = "static/js/google_heat_map.js"></script>
+
+
 
     <!-- Stylesheet
     ================================================== -->
@@ -61,7 +66,9 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
+
   <body onload="initMap()">
+
     <!-- Navigation
     ==========================================-->
     <nav id="tf-menu" class="navbar navbar-default navbar-fixed-top on">
@@ -120,28 +127,12 @@
                             <hr>
                             <div class="clearfix"></div>
                         </div>
-                        <p class="intro">Influenza is a contagious illness that attacks the respiratory organs and in doing so claims the lives of many people throughout the world yearly.</p>
-                        <p class="intro">In this modern age of connectivity and information sharing, is it possible to make use of social media to track instances of Influenza?
-                                          This project was set up in order to research this possibility.</p>
-                        <!--
-                        <ul class="about-list">
-                            <li>
-                                <span class="fa fa-dot-circle-o"></span>
-                                <strong>Data</strong> - <em>Utilise the Twitter Stream API to gather data</em>
-                            </li>
-                            <li>
-                                <span class="fa fa-dot-circle-o"></span>
-                                <strong>Processing</strong> - <em>Make use of Natural Language Toolkit (NLTK) to filter out unwanted data</em>
-                            </li>
-                            <li>
-                                <span class="fa fa-dot-circle-o"></span>
-                                <strong>Analyze</strong> - <em>Produce statistics based on valid information</em>
-                            </li>
-                            <li>
-                                <span class="fa fa-dot-circle-o"></span>
-                                <strong>Display</strong> - <em>Create a web interface to display the data</em>
-                            </li>
-                        </ul> -->
+                        <p class="intro">Influenza is a contagious illness that attacks the respiratory organs and
+                                            in doing so claims the lives of many people throughout the world yearly.</p>
+                        <p class="intro">In this modern age of connectivity and information sharing, is it possible to
+                                            make use of social media to track instances of Influenza?
+                                            This project was set up in order to research this possibility.</p>
+
                     </div>
                 </div>
             </div>
@@ -169,7 +160,7 @@
                     <!-- Location Filter --------
                     ==========================================-->
                     <div id = "search_filter_area">
-                        <input type='text' name='searchmap' id='searchmap' placeholder='Search Location'>
+                        <input type='text' name='searchmap' id='searchmap' placeholder='Search Location' title = "Type search location and press enter">
                         <input class = "mapBtn" id="searchMapBtn" type="button" value="Search"
                                onclick="moveToLocation(document.getElementById('searchmap').value)">
                     </div>
@@ -177,30 +168,28 @@
                     <!-- =====================================
                             -------- Time Filter --------
                     ==========================================-->
-                    <div id = "time_filter_area">
-                        <div class = "filterLabel">Time Period:</div>
-                            <select id='time_filter' class='filter_input'onchange="updateHeatMap(this.value)">
-                                <option value="day">Last 24hrs</option>
-                                <option value="week">Last Week</option>
-                                <option value="month">Last Month</option>
-                                <option value = "all">All</option>
-                            </select>
-                        </div>
+
+                    <div id = "time_filter_area" title = "Slide left/right to view this months data">
+                        <div id="time_filter_label"></div>
+                         <input type="range" id="time_filter"  min="0" max="29" step="1" value="0"/>
+
                     </div>
-                     <!-- =====================================
+
+
+                    <!-- =====================================
                             -------- Zoom Filter -------
                     ========================================== -->
                     <!-- TODO------add a zoom button to return to default -->
                     <div id ="zoom_filter_area">
                         <div class ="filterLabel">Zoom:</div>
                         <input class = "mapBtn" id="zoomIn" type="button" value="+"
-                               onclick="zoomInOut(1)">
+                               onclick="zoomInOut(1)" title = "Click to zoom in">
                         <input class = "mapBtn" id="zoomOut" type="button" value="-"
-                               onclick="zoomInOut(-1)">
+                               onclick="zoomInOut(-1)" title = "Click to zoom out">
                     </div>
+                </div>
 
-
-                <div id ='map_container'></div>
+                <div id ='map_container' title="Double left click to zoom in / Double right click to zoom out"></div>
             </div>
         </div>
     </div>
@@ -544,9 +533,8 @@
     </nav>
 
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script type="text/javascript" src="/static/js/jquery.1.11.1.js"></script>
+
+
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.js')}}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/SmoothScroll.js')}}"></script>
