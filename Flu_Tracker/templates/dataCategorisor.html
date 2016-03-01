@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Categorise Data</title>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" type="text/css"  href="{{ url_for('static', filename='css/bootstrap.css')}}" >
+    <link rel="stylesheet" type="text/css" href="static/css/bootstrap.css">
+</head>
+<body>
+    <form id = "classify" style="margin-left:20px; margin-top:20px;">
+        <div class="form-group">
+            <input type="text" id = "tweetId" style = "display:none;">
+            <div id = "sentence">No tweet text available</div>
+            <br>
+        </div>
+
+        <div class="form-group">
+             <input type="radio" id="noFlu" name="flu" value="no flu" checked>
+            <label for="noFlu"><i>Negative</i></label>
+            <br>
+            <input type="radio" id = "hasFlu" name="flu" value="has flu">
+            <label for="hasFlu"><i>Positive</i></label>
+        </div>
+        <input type="button" id = "submitButton" name="submitButton" class="btn btn-default" value="Submit"></input>
+    </form>
+    <!-- Javascript for updating and getting tweets from database -->
+    <script type="text/javascript" src="{{ url_for('static', filename ='js/categoriseTweets.js')}}"></script>
+    <script type="text/javascript" src="static/js/categoriseTweets.js"></script>
+</body>
+</html>

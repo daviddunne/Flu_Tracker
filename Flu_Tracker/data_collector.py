@@ -1,14 +1,12 @@
 from tweepy import Stream
 from tweepy import OAuthHandler
 from tweepy.streaming import StreamListener
-from requests.exceptions import Timeout
 import json
-import time
+import datetime
 from utilities import logger
 from utilities.database_handler import DatabaseHandler
 from utilities.validator import ValidatorClass
 from utilities.geolocation_finder import GeolocationFinder
-
 
 
 # Set authentication variables
@@ -18,41 +16,44 @@ atoken = '2915745407-Iuj5hcqjaKyeSiqMzhwpqdo6YUsGM0EHkp58XpM'
 asecret = 'Vcu5Kupvl6BEOdNiWDkQc2hQX8LhVzkqjp444gMFJNOKG'
 
 
-
 class Listener(StreamListener):
     def __init__(self):
-        self.validator = ValidatorClass()
+        self.validator = ValidatorClass("classifiers/pickle_files/")
         self.geo_finder = GeolocationFinder()
-        self.database_handler = DatabaseHandler()
+        self.database_handler = DatabaseHandler('datacollector', 'datacollector')
 
     def on_data(self, raw_data):
         # Load the raw data
-        json_data = json.loads(raw_data)
+        try:
+            json_data = json.loads(raw_data)
 
-        # Get some required details from json data
-        user_id, text, language, location, timestamp = self.get_data_from_json_data(json_data)
 
-        # Check if text is valid before processing
-        if self.validator.validate_text(text):
-            record = {'created':timestamp, 'text':text, 'user_id':user_id, 'user_language':language}
+            # Get some required details from json data
+            user_id, text, language, location, timestamp = self.get_data_from_json_data(json_data)
 
-            # Check if tweet contains a valid location
-            if self.validator.validate_location(location) and location != 'None':
-                # get location details of user
-                address, latitude, longitude = self.geo_finder.get_location(location)
+            # Check if text in tweet is valid before processing
+            if self.validator.validate_text(text):
+                record = {'created': timestamp,'user_language': language}
 
-                # If location has not returned None for lat and long, construct and record the map point in database
-                if (latitude is not None) and (longitude is not None):
-                    if(latitude != 'None') and (longitude != 'None'):
-                        self.add_location_attributes_to_record(address, latitude, longitude, record)
-                        self.record_map_point(latitude, longitude, timestamp)
+                # Check if tweet contains a valid location
+                if self.validator.validate_location(location) and location != 'None':
+                    # get location details of user
+                    address, latitude, longitude = self.geo_finder.get_location(location)
 
-                # Check if language is english, if not store in non english tweet collection
-                user_language = record['user_language']
-                if (user_language == 'en') or (user_language == 'en-gb'):
-                    self.database_handler.write_english_tweet_to_database(record)
-                else:
-                    self.database_handler.write_non_english_tweets_to_database(record)
+                    # If location has not returned None for lat and long, construct and record the map point in database
+                    if (latitude is not None) and (longitude is not None):
+                        if(latitude != 'None') and (longitude != 'None'):
+                            self.add_location_attributes_to_record(address, latitude, longitude, record)
+                            self.record_map_point(latitude, longitude, timestamp, text)
+
+                    # Check if language is english, if not store in non english tweet collection
+                    user_language = record['user_language']
+                    if (user_language == 'en') or (user_language == 'en-gb'):
+                        self.database_handler.write_english_tweet_to_database(record)
+                    # else:
+                    #     self.database_handler.write_non_english_tweets_to_database(record)
+        except TypeError:
+            logger.logging.warning("Type Error Exception raised during loading of json")
 
     def add_location_attributes_to_record(self, address, latitude, longitude, record):
         # Add location values to record
@@ -60,9 +61,9 @@ class Listener(StreamListener):
         record['latitude'] = latitude
         record['longitude'] = longitude
 
-    def record_map_point(self, latitude, longitude, timestamp):
-        mapPointRecord = {'date': int(timestamp), 'lat':latitude, 'long':longitude}
-        self.database_handler.write_map_point(mapPointRecord)
+    def record_map_point(self, latitude, longitude, timestamp, text):
+        map_point_record = {'date': int(timestamp), 'lat': latitude, 'long': longitude, 'text': text}
+        self.database_handler.write_map_point(map_point_record)
 
     def get_data_from_json_data(self, json_data):
         try:
@@ -84,9 +85,22 @@ class Listener(StreamListener):
             # if keyError is raised set the text to a banned word so it will not be accepted
             text = 'invalid text'
         # Get time tweet picked up
-        timestamp = time.strftime("%d%m%Y")
+        timestamp = self.get_timestamp()
 
         return user_id, text, user_language, loc, timestamp
+
+    def get_timestamp(self):
+        now = datetime.datetime.now()
+        day = str(now.day)
+        month = str(now.month)
+        year = str(now.year)
+
+        if len(day) == 1:
+            day = '0' + day
+        if len(month) == 1:
+            month = '0' + month
+        timestamp = year + month + day
+        return timestamp
 
     def on_error(self, status_code):
         logger.logging.warning('Listener returned status code: ' + str(status_code))

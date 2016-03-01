@@ -1,14 +1,24 @@
+.section-title center {
+    text-align: center;
+}
 #map_container {
     width:100%;
     height: 500px;
+    margin-bottom: 30px;
+}
+.mapFilterSpace{
+    min-width:200px;
+}
+.mapFilterSpaceLarge{
+    min-width:300px;
 }
 #search_map_filters{
     width:100%;
     margin-top:20px;
 }
-#zoom_filter_area{
+#play_filter_area{
     height: 40px;
-    width:32%;
+    width:22%;
     background-color: rgba(173, 170, 169, 0.29);
     margin-bottom:5px;
     border-radius:5px;
@@ -16,16 +26,12 @@
     float:right;
     margin-left:10px;
 }
-#zoom_filter_area .mapBtn{
-    width:33%;
+#play_filter_area .mapBtn{
+    width:100%;
 }
-#zoom_filter_area .filterLabel{
-    width:25%;
-}
-
 #time_filter_area{
     height: 40px;
-    width:32%;
+    width:42%;
     float:right;
     margin-left:2%;
     background-color: rgba(173, 170, 169, 0.29);
@@ -37,7 +43,7 @@
 #time_filter_area .filter_input{
     width:60%;
 }
-#search_filter_area{
+#search_filter_area {
     height: 40px;
     width:32%;
     float:left;
@@ -91,4 +97,67 @@
     color: #fff;
     background-color: #ec971f;
     border-color: #fff;
+}
+
+#text_display{
+    width: 90%; !important;
+    margin: 0 auto;
+    display: none;
+    text-align: left; !important;
+}
+#text_display .table .th {
+    text-align: center; !important;
+}
+#text_display {
+    width: 95%;
+    margin: 0 auto;
+}
+
+@media screen and (max-width: 970px) {
+     #play_filter_area {
+        clear:both;
+        float:none;
+        margin-left: 0;
+
+    }
+    #time_filter_area {
+        clear:both;
+        float:none;
+        padding-bottom:5px;
+        margin-left:0;
+        width: 100%;
+    }
+    #search_filter_area {
+        clear:both;
+        margin-top: 5px;
+        float: none;
+        margin-left: 0;
+        width: 50%;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .img-responsive {
+        margin-bottom: 20px;
+    }
+    #play_filter_area {
+        clear:both;
+        float:none;
+        margin-left: 0;
+
+    }
+    #time_filter_area {
+        clear:both;
+        float:none;
+        padding-bottom:5px;
+        margin-left:0;
+        width: 100%;
+    }
+    #search_filter_area {
+        clear:both;
+        margin-top: 5px;
+        float: none;
+        margin-left: 0;
+        width: 50%;
+    }
 }

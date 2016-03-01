@@ -46,8 +46,7 @@ a:focus{
 }
 
 .section-title hr{
-	border-color: #fcac45;
-	border-width: 4px;
+	border:4px #fcac45;
 	width: 60px;
 	float: left;
 	clear: both;
@@ -115,11 +114,8 @@ font-weight: 900;
 	}
 /* Home Style */
 #tf-home{
-	background: url(../img/01.jpg);
 	background-size: cover;
-	background-position: center;
-	background-attachment: fixed;
-	background-repeat: no-repeat;
+	background: url(../img/01.jpg) no-repeat fixed center;
 	color: #cfcfcf;
 }
 
@@ -179,11 +175,8 @@ ul.about-list li span{
 
 /* Team Section */
 #tf-meetFluTrakR{
-	background: url(../img/03.jpg);
 	background-size: cover;
-	background-position: center;
-	background-attachment: fixed;
-	background-repeat: no-repeat;
+	background: url(../img/03.jpg) no-repeat fixed center;
 	color: #ffffff;
 }
 #tf-meetFluTrakR .overlay{
@@ -204,14 +197,14 @@ ul.about-list li span{
 .section-title h2,
 .section-title.center h2{
 	font-weight: 300;
+	text-align: center;
 }
 .section-title.center .line{
 	border-top: 4px solid #fcac45;
 	height: 10px;
 	width: 60px;
 	text-align: center;
-	margin: 0 auto;
-	margin-top: 20px;
+	margin: 20px auto 0;
 }
 
 .section-title.center hr {
@@ -305,11 +298,8 @@ img.img-circle.team-img {
 
 /* Clients Section */
 #tf-clients{
-	background: url(../img/04.jpg);
 	background-size: cover;
-	background-position: center;
-	background-attachment: fixed;
-	background-repeat: no-repeat;
+	background: url(../img/04.jpg) no-repeat fixed center;
 	color: #ffffff;
 }
 
@@ -442,12 +432,9 @@ ol.type li a.active { font-weight: 700; }
 	color: #FCAC45;
 }
 /* Testimonials Section */
-#tf-testimonials{
-	background: url(../img/05.jpg);
+#tf-contact{
 	background-size: cover;
-	background-position: center;
-	background-attachment: fixed;
-	background-repeat: no-repeat;
+	background: url(../img/05.jpg) no-repeat fixed center;
 	color: #ffffff;
 }
 
@@ -537,7 +524,7 @@ button.btn.tf-btn.btn-default {
 .btn.active.focus {
 	outline: thin dotted;
 	outline: none;
-	outline-offset:none;
+	outline-offset:unset;
 }
 /* Footer */
 nav#footer{
@@ -569,3 +556,60 @@ nav#footer p{
 	border-color: #FCAC45;
 	color: #ffffff;
 }
+.circle {
+	margin:0 auto;
+	width: 200px;
+	height: 100px;
+	background: transparent;
+	-moz-border-radius: 50px;
+	-webkit-border-radius: 50px;
+	border-radius: 50px;
+    border_width: 3px;
+    border-style: solid;
+    border-color: #ff6600;
+    font-size: large;
+    font-weight: bold;
+	padding-top: 30px;
+}
+.row #weekly_chart{
+	width: 100%;
+	margin: 0 auto;
+
+
+}
+.container .chart_title{
+	width: 100%;
+	text-align:center;
+}
+
+.table tbody tr th #table_heading h4 {
+	color: #ff6600; !important;
+}
+
+.modal {
+    display:    none;
+    position:   fixed;
+    z-index:    1000;
+    top:        0;
+    left:       0;
+    height:     100%;
+    width:      100%;
+    background: rgba(17, 17, 17, 0.91)
+                url('../img/loading.gif')
+                50% 50%
+                no-repeat;
+}
+
+/* When the body has the loading class, we turn
+   the scrollbar off with overflow:hidden */
+body.loading {
+    overflow: hidden;
+}
+
+/* Anytime the body has the loading class, our
+   modal element will be visible */
+body.loading .modal {
+    display: block;
+}
+
+

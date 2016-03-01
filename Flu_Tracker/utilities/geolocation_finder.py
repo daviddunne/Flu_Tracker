@@ -1,5 +1,5 @@
 from geopy.geocoders import Nominatim
-from geopy.exc import GeocoderTimedOut
+from geopy.exc import GeocoderTimedOut, GeocoderUnavailable
 from utilities import logger
 
 
@@ -33,6 +33,8 @@ class GeolocationFinder:
             self.geolocation = self.geolocator.geocode(location, timeout=None)
         except GeocoderTimedOut:
             logger.logging.warning('GeolocationFinder: geolocator timeout')
+            self.geolocation = None
+        except GeocoderUnavailable:
             self.geolocation = None
         if self.geolocation is not None:
             self.location_cache[location] = self.geolocation

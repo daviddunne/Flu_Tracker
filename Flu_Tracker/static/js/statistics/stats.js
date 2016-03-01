@@ -1,0 +1,40 @@
+/**
+ * Created by david on 27/01/16.
+ */
+
+$(document).ready(function(){
+    var d = new Date();
+
+    var day = d.getDate();
+    var month = d.getMonth()+1;
+    var year = d.getFullYear();
+    if(day <10){ day = '0' + day; }
+    if(month < 10){ month = '0' + month};
+    setStatsCounts(day, month, year)
+});
+
+function setStatsCounts(day, month, year){
+     $.ajax({
+        url: '/get/stats/count',
+        type: 'GET',
+        data: {day : day, month: month, year: year},
+        dataType: "json",
+        success: function (response) {
+            var responseValue = response['results'];
+            var today_count = responseValue['today'];
+            var month_count = responseValue['month'];
+            var year_count = responseValue['year'];
+            var all_count = responseValue['all'];
+            $('#today').html(today_count)
+            $('#this_month').html(month_count)
+            $('#this_year').html(year_count)
+            $('#all_time').html(all_count)
+        },
+        error: function () {
+            $('#today').html('Error')
+            $('#this_month').html('Error')
+            $('#this_year').html('Error')
+            $('#all_time').html('Error')
+        }
+    });
+};
