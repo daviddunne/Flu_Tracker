@@ -53,7 +53,8 @@ class Listener(StreamListener):
                     # else:
                     #     self.database_handler.write_non_english_tweets_to_database(record)
         except TypeError:
-            logger.logging.warning("Type Error Exception raised during loading of json")
+            logger.logging.warning("Type Error Exception raised during loading of json data")
+
 
     def add_location_attributes_to_record(self, address, latitude, longitude, record):
         # Add location values to record
@@ -64,6 +65,7 @@ class Listener(StreamListener):
     def record_map_point(self, latitude, longitude, timestamp, text):
         map_point_record = {'date': int(timestamp), 'lat': latitude, 'long': longitude, 'text': text}
         self.database_handler.write_map_point(map_point_record)
+
 
     def get_data_from_json_data(self, json_data):
         try:
