@@ -11,11 +11,11 @@ class GeolocationFinderTests(unittest.TestCase):
         self.test_geolocation_finder = GeolocationFinder()
         self.attrs = {'address': 'test_address', 'latitude': '0000', 'longitude': '0000'}
 
-    def test_get_location_returns_None_None_None_If_location_is_None(self):
+    def test_GetLocation_ReturnsNoneNoneNone_IfLocationIsNone(self):
 
         self.assertEqual((None, None, None), self.test_geolocation_finder.get_location(None))
 
-    def test_get_location_sets_geolocation_from_cache_when_present(self):
+    def test_get_location_sets_geolocation_from_cache_When_geolocation_exists_in_cache(self):
         # Arrange
         test_geolocation = Mock(**self.attrs)
         self.test_geolocation_finder.location_cache['Dublin'] = test_geolocation
