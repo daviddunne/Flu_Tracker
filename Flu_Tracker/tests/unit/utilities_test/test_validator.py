@@ -2,7 +2,7 @@ import os
 import unittest
 
 from context import project_root_dir
-from ..utilities.validator import ValidatorClass
+from utilities.validator import ValidatorClass
 
 # Constants
 path_to_pickle_files = os.path.join(project_root_dir, "classifiers/pickle_files/")
