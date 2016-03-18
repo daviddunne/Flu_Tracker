@@ -13,12 +13,12 @@ class ValidatorClass:
             return False
         return True
 
-    def validate_text(self, text):
-        if text == '':
+    def validate_text_from_tweet(self, text_from_tweet):
+        if text_from_tweet == '':
             return False
-        for words in self.banned_word_list:
-            if words in text:
+        for banned_word in self.banned_word_list:
+            if banned_word in text_from_tweet:
                 return False
-        text_class = self.text_classifier.sentiment(text)
-        return text_class
+        text_classification = self.text_classifier.sentiment(text_from_tweet)
+        return text_classification
 

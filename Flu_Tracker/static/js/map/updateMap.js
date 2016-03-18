@@ -10,7 +10,7 @@ function updateSlider() {
         $('#text_display').fadeOut();
         $.ajax({
             url: '/getmappoints',
-            type: 'POST',
+            type: 'GET',
             data: {time : inputValue},
             dataType: "json",
             success: function(response) {
