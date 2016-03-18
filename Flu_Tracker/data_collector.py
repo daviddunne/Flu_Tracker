@@ -3,6 +3,7 @@ from tweepy import OAuthHandler
 from tweepy.streaming import StreamListener
 import json
 import datetime
+import time
 from utilities import logger
 from utilities.database_handler import DatabaseHandler
 from utilities.validator import ValidatorClass
@@ -20,20 +21,19 @@ class Listener(StreamListener):
     def __init__(self):
         self.validator = ValidatorClass("classifiers/pickle_files/")
         self.geo_finder = GeolocationFinder()
-        self.database_handler = DatabaseHandler('datacollector', 'datacollector')
+        self.database_handler = DatabaseHandler('ds061335.mongolab.com', 61335, 'datacollector', 'datacollector')
 
     def on_data(self, raw_data):
         # Load the raw data
         try:
             json_data = json.loads(raw_data)
 
-
             # Get some required details from json data
             user_id, text, language, location, timestamp = self.get_data_from_json_data(json_data)
 
             # Check if text in tweet is valid before processing
-            if self.validator.validate_text(text):
-                record = {'created': timestamp,'user_language': language}
+            if self.validator.validate_text_from_tweet(text):
+                record = {'created': timestamp, 'user_language': language}
 
                 # Check if tweet contains a valid location
                 if self.validator.validate_location(location) and location != 'None':
@@ -55,7 +55,6 @@ class Listener(StreamListener):
         except TypeError:
             logger.logging.warning("Type Error Exception raised during loading of json data")
 
-
     def add_location_attributes_to_record(self, address, latitude, longitude, record):
         # Add location values to record
         record['address'] = address
@@ -65,7 +64,6 @@ class Listener(StreamListener):
     def record_map_point(self, latitude, longitude, timestamp, text):
         map_point_record = {'date': int(timestamp), 'lat': latitude, 'long': longitude, 'text': text}
         self.database_handler.write_map_point(map_point_record)
-
 
     def get_data_from_json_data(self, json_data):
         try:
@@ -107,13 +105,26 @@ class Listener(StreamListener):
     def on_error(self, status_code):
         logger.logging.warning('Listener returned status code: ' + str(status_code))
 
+
 if __name__ == '__main__':
     # Authenticate and connect to twitter
     auth = OAuthHandler(ckey, csecret)
     auth.set_access_token(atoken, asecret)
     twitterStream = Stream(auth, Listener())
+
+    # Words o listen for
     keyword_list = ['manflu', 'flu']
     print("Data Collector Process Started")
+    try:
+        # Listener to capture data containing keywords
+        twitterStream.filter(track=keyword_list)
+    except:
+        # Wait 5 seconds and attempt to restart Listener
+        i = 5
+        print('Error during data collection, attempting to restart in:')
+        while i > 0:
+            print(str(i))
+            i -= 1
+            time.sleep(1)
+        twitterStream.filter(track=keyword_list)
 
-    # Filter to capture data containing keywords
-    twitterStream.filter(track=keyword_list)
