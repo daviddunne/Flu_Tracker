@@ -179,6 +179,7 @@ def normalise_date(date):
 
     return date
 
+app.secret_key = 'Youwillneverguess'
 
 if __name__ == '__main__':
     app.run(debug=True)

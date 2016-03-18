@@ -1,9 +1,11 @@
 from pymongo import MongoClient
 from bson.objectid import ObjectId
+from graphs.date_ranges import get_date_ranges_for_this_year
+import collections
 
 
 class DatabaseHandler:
-        def __init__(self, url, port, user, passwd):
+        def __init__(self, url='localhost', port=27017, user='', passwd=''):
                 """
                 :param url: location of mongoDB host
                 :param port: port for mongoDB
@@ -15,7 +17,8 @@ class DatabaseHandler:
                 self.passwd = passwd
                 self.client = MongoClient(url, port)
                 self.db = self.client.flutracker
-                self.db.authenticate(user, passwd)
+                if url != "localhost":
+                        self.db.authenticate(user, passwd)
 
         def write_english_tweet_to_database(self, record):
                 self.db.english_tweets.insert(record)
@@ -26,16 +29,15 @@ class DatabaseHandler:
         def write_map_point(self, record):
                self.db.map_points.insert(record)
 
-
         def get_map_points_for_five_dates(self, start, end):
-                res = self.db.map_points.find({'date': {'$lt': int(start), '$gt': int(end)}})
+                res = self.db.map_points.find({'date': {'$lte': int(start), '$gte': int(end)}})
                 return res
 
         def get_map_point_data(self, max_lat, max_lng, min_lat, min_lng, start_date, end_date):
 
                 res = self.db.map_points.find({'lat': {'$lte': float(max_lat), '$gte': float(min_lat)},
                                                'long': {'$lte': float(max_lng), '$gte': float(min_lng)},
-                                               'date': {'$lte': start_date, '$gte': end_date}})
+                                               'date': {'$lte': int(start_date), '$gte': int(end_date)}})
                 return res
 
         def get_uncategorised_tweet_from_english_collection(self):
@@ -50,7 +52,7 @@ class DatabaseHandler:
                         {"_id": ObjectId(id)},
                         {"$set": {"sentiment": sentiment}}
                 )
-                return res
+                return res.modified_count
 
         def get_tweets_with_sentiment(self, sentiment):
                 # Used for training classifiers
@@ -79,3 +81,14 @@ class DatabaseHandler:
                 count = self.db.english_tweets.find({'created': {'$lte': max_date, '$gte': min_date}}).count()
                 return count
 
+        def get_instance_count_count_for_each_week_of_this_year(self):
+                # Gets the start and end daes for each week of the year
+                date_ranges = get_date_ranges_for_this_year()
+
+                # Create an ordered dictionary of weekly counts
+                count_date_dict = {}
+                for label, value in date_ranges.items():
+                    count_date_dict[label.replace('week', '')] = self.get_count_for_time_period(value['end_date'], value['start_date'])
+                count_date_dict = collections.OrderedDict(sorted(count_date_dict.items()))
+
+                return count_date_dict

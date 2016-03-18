@@ -1,9 +1,19 @@
 /**
  * Created by david on 28/01/16.
  */
-
+var data
+var option
+//Re-draw chart when window size changes
+$(window).on('resize', function(){
+    var ctx = document.getElementById("weekly_chart").getContext('2d');
+    var weekly_line_chart = new Chart(ctx).Line(data, option);
+});
 
 $(document).ready(function (){
+    var returnedData
+    var labels = [];
+    var values = [];
+
      $.ajax({
         url: '/get/weekly/chart/data',
         type: 'GET',
@@ -11,9 +21,8 @@ $(document).ready(function (){
         success: function (response) {
 
             var responseValue = response['results'];
-            var returnedData = responseValue['data'];
-            var labels = [];
-            var values = [];
+            returnedData = responseValue['data'];
+
 
             for(var key in returnedData) {
                 if(returnedData.hasOwnProperty(key)) {
@@ -23,7 +32,7 @@ $(document).ready(function (){
             }
 
             $(function() {
-                var data = {
+                data = {
                 labels: labels, //labels for x axis
                 datasets: [
                     {
@@ -38,7 +47,7 @@ $(document).ready(function (){
                     },
                 ]
             };
-            var option = {
+            option = {
                 datasetFill: false,
             };
             var ctx = document.getElementById("weekly_chart").getContext('2d');
