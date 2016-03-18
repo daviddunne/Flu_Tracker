@@ -23,6 +23,5 @@ def get_week_start_date(year, week):
     if year == d.isocalendar()[0]:
         delta_weeks -= 1
     delta = timedelta(days=-delta_days, weeks=delta_weeks)
-    print(type(d + delta))
     return d + delta
 

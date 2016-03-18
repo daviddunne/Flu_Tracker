@@ -109,11 +109,6 @@ function keyPress(e){
 }
 
 function displayTweet_Texts(lat, lng) {
-    var fifty_km = 0.5;
-    var maxLat = lat + fifty_km;
-    var minLat = lat - fifty_km;
-    var maxLng = lng + fifty_km;
-    var minLng = lng - fifty_km;
     var time_filter_label_text = $('#time_filter_label').text();
 
     //get the date elements from text of label
@@ -125,9 +120,11 @@ function displayTweet_Texts(lat, lng) {
     $.ajax({
         url: '/get/data/points/for/area',
         type: 'GET',
-        data: {max_lat : maxLat, min_lat: minLat,
-               max_lng: maxLng, min_lng: minLng,
-               start_date: start_date, end_date: end_date},
+        data: {
+            lat : lat,
+            lng: lng,
+            start_date: start_date, end_date: end_date
+        },
         dataType: "json",
         success: function(response) {
             var display = $('#text_display');
@@ -141,6 +138,7 @@ function displayTweet_Texts(lat, lng) {
     });
 
     function constructHTML(points) {
+        console.log(points);
         var table_rows_html = "";
         var row_count = 0;
         for(var i = 0; i < points.length; i++) {

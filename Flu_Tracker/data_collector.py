@@ -54,6 +54,9 @@ class Listener(StreamListener):
                     #     self.database_handler.write_non_english_tweets_to_database(record)
         except TypeError:
             logger.logging.warning("Type Error Exception raised during loading of json data")
+            print("Exception occured")
+        except ValueError:
+            logger.logging.warning("ValueError Exception Raised during loading of json data")
 
     def add_location_attributes_to_record(self, address, latitude, longitude, record):
         # Add location values to record
