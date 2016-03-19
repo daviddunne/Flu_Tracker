@@ -81,7 +81,7 @@ class DatabaseHandler:
                 count = self.db.english_tweets.find({'created': {'$lte': max_date, '$gte': min_date}}).count()
                 return count
 
-        def get_instance_count_count_for_each_week_of_this_year(self):
+        def get_instance_count_for_each_week_of_this_year(self):
                 # Gets the start and end daes for each week of the year
                 date_ranges = get_date_ranges_for_this_year()
 
