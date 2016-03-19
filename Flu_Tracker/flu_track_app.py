@@ -77,7 +77,7 @@ def get_stats_counts():
 
 @app.route('/get/weekly/chart/data', methods=['GET'])
 def get_weekly_chart_date():
-    data = database_handler.get_instance_count_count_for_each_week_of_this_year()
+    data = database_handler.get_instance_count_for_each_week_of_this_year()
     values = {'data': data}
 
     return make_response(jsonify(results=values), 200)
