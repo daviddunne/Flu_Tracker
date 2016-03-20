@@ -1,4 +1,5 @@
 import os
 """This file is used to get absolute path to test directory"""
 
-project_root_dir = os.path.dirname(__file__)
+dir = os.path.dirname(__file__)
+project_root_dir = dir.replace('/utilities', '')
