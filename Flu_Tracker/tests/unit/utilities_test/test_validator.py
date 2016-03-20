@@ -1,7 +1,7 @@
 import os
 import unittest
 
-from context import project_root_dir
+from utilities.context import project_root_dir
 from utilities.validator import ValidatorClass
 
 # Constants
