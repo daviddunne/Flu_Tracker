@@ -27,7 +27,7 @@ class DatabaseHandler:
                 self.db.non_english_tweets.insert(record)
 
         def write_map_point(self, record):
-               self.db.map_points.insert(record)
+                self.db.map_points.insert(record)
 
         def get_map_points_for_five_dates(self, start, end):
                 res = self.db.map_points.find({'date': {'$lte': int(start), '$gte': int(end)}})
@@ -84,7 +84,6 @@ class DatabaseHandler:
         def get_instance_count_for_each_week_of_this_year(self):
                 # Gets the start and end daes for each week of the year
                 date_ranges = get_date_ranges_for_this_year()
-
                 # Create an ordered dictionary of weekly counts
                 count_date_dict = {}
                 for label, value in date_ranges.items():
