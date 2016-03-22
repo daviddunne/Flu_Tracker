@@ -1,6 +1,6 @@
 from pymongo import MongoClient
 from bson.objectid import ObjectId
-from graphs.date_ranges import get_date_ranges_for_this_year
+from graphs import date_ranges
 import collections
 
 
@@ -41,7 +41,7 @@ class DatabaseHandler:
                 return res
 
         def get_uncategorised_tweet_from_english_collection(self):
-               # Used when developing a training set of tweets.
+                # Used when developing a training set of tweets.
                 res = self.db.english_tweets.find_one({'sentiment': 'unknown'})
                 return res
 
@@ -62,12 +62,13 @@ class DatabaseHandler:
                 return self.db.english_tweets.find().count()
 
         def get_today_count(self, today_date):
+                print(type(today_date))
                 return self.db.english_tweets.find({'created': today_date}).count()
 
         def get_yearly_count(self, year):
                 # Used for statistics
-                low = year + '01' + '00'
-                high = year + '12' + '31'
+                low = str(year) + '01' + '00'
+                high = str(year) + '12' + '31'
                 return self.db.english_tweets.find({'created': {'$lte': high, '$gte': low}}).count()
 
         def get_month_count(self, year_month):
@@ -83,10 +84,11 @@ class DatabaseHandler:
 
         def get_instance_count_for_each_week_of_this_year(self):
                 # Gets the start and end daes for each week of the year
-                date_ranges = get_date_ranges_for_this_year()
+                date_range = date_ranges.get_date_ranges_for_this_year()
+                print(date_range)
                 # Create an ordered dictionary of weekly counts
                 count_date_dict = {}
-                for label, value in date_ranges.items():
+                for label, value in date_range.items():
                     count_date_dict[label.replace('week', '')] = self.get_count_for_time_period(value['end_date'], value['start_date'])
                 count_date_dict = collections.OrderedDict(sorted(count_date_dict.items()))
 
