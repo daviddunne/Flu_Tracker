@@ -1,7 +1,11 @@
 // JQuery for Ajax call to database when time filter slide-bar is changed
 $(document).ready(function() {
     $('#time_filter').on('change', updateMapOnSliderChange);
-    document.getElementById("time_filter").value = 1;
+});
+
+$(document).ready(function(){
+    $('#time_filter').val(1);
+    updateMapOnSliderChange();
 });
 
 function updateMapOnSliderChange() {
