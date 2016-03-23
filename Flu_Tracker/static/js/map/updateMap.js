@@ -1,20 +1,23 @@
-// JQuery for Ajax call to database when time filter slidebar is changed
+// JQuery for Ajax call to database when time filter slide-bar is changed
 $(document).ready(function() {
-    $('#time_filter').on('change', updateSlider);
+    $('#time_filter').on('change', updateMapOnSliderChange);
 });
 
-function updateSlider() {
-        var inputValue = $('#time_filter').val();
+function updateMapOnSliderChange() {
+        var timeFromFilter = $('#time_filter').val();
+        // Display loading gif
         $body = $("body");
         $body.addClass("loading");
+        // Hide text from tweets if present
         $('#text_display').fadeOut();
+        // Send Ajax call to API
         $.ajax({
             url: '/getmappoints',
             type: 'GET',
-            data: {time : inputValue},
+            data: {time : timeFromFilter},
             dataType: "json",
             success: function(response) {
-
+                // Extract data from response
                 var responseValue = response['results'];
                 var points = responseValue['datapoints'];
                 var startdate = "" + responseValue['start_date'];
@@ -22,7 +25,7 @@ function updateSlider() {
 
                 // Set label for time slider
                 document.getElementById("time_filter_label").innerHTML = "Date Range: " + startdate  + " - " + enddate;
-               //Clear mapdatapoint
+               // Clear mapdatapoint array
                 mapdatapoints = [];
 
                 // Get the number of entries in the data returned from ajax call
@@ -30,18 +33,19 @@ function updateSlider() {
 
                 // Loop through data
                 for(var i = 0; i < len; i++) {
+                    // Select point from array
                     var point = points[i];
-                    // Extract latitude and longitude
+                    // Extract latitude and longitude from point
                     var lat = point[0];
                     var long = point[1];
-                    // Create map points with lat and long
+                    // Create googlemap points with lat and long
                     var gPoint = new google.maps.LatLng(parseFloat(lat), parseFloat(long));
-                    // Add points to mapdatapoints
+                    // Add googlemap point to mapdatapoints array
                     mapdatapoints.push(gPoint);
-                    $body.removeClass("loading");
                 }
                 updateHeatMap();
-
+                // Remove loading gif
+                $body.removeClass("loading");
             }
         });
     }
