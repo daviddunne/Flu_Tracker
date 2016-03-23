@@ -1,18 +1,15 @@
 /**
  * Created by david on 27/01/16.
  */
-
+// Scripts to display statistics/counts
 $(document).ready(function(){
-    var d = new Date();
 
-    var day = d.getDate();
-    var month = d.getMonth()+1;
-    var year = d.getFullYear();
-    if(day <10){ day = '0' + day; }
-    if(month < 10){ month = '0' + month};
-    setStatsCounts(day, month, year)
+    var date = getDayMonthYear();
+    setStatsCounts(date.day, date.month, date.year)
 });
 
+
+// Set count values for statistics
 function setStatsCounts(day, month, year){
      $.ajax({
         url: '/get/stats/count',
@@ -38,3 +35,19 @@ function setStatsCounts(day, month, year){
         }
     });
 };
+
+function getDayMonthYear() {
+    // get date and standardise it
+    var d = new Date();
+    var day = d.getDate();
+    var month = d.getMonth() + 1;
+    var year = d.getFullYear();
+    if (day < 10) {
+        day = '0' + day;
+    }
+    if (month < 10) {
+        month = '0' + month
+    }
+    ;
+    return {day: day, month: month, year: year};
+}

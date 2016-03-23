@@ -23,11 +23,6 @@
     <link rel="stylesheet" type="text/css"  href="{{ url_for('static', filename='css/bootstrap.css')}}" >
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='fonts/font-awesome/css/font-awesome.css')}}">
 
-    <!-- Slider
-    ================================================== -->
-    <!--<link href="{{ url_for('static', filename='css/owl.carousel.css')}}" rel="stylesheet" media="screen">-->
-    <!--<link href="{{ url_for('static', filename='css/owl.theme.css')}}" rel="stylesheet" media="screen">-->
-
     <!--JQUERY -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script type="text/javascript" src="/static/js/jquery.1.11.1.js"></script>
@@ -67,7 +62,6 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
-
   <body onload="initMap(), updateSlider()">
 
     <!-- Navigation
@@ -108,7 +102,7 @@
                 <a href="#tf-about" class="fa fa-angle-down page-scroll"></a>
             </div>
         </div>
-    </div>
+    </div> <!-- end tf-home -->
 
     <!-- About Us Page
     ==========================================-->
@@ -152,14 +146,13 @@
                                     </tr>
                                     <tr><td><strong>Deaths Annually</strong></td><td><ul><li>200 - 500 (Ireland)</li><li>250,000 - 500, 000 (Worldwide)</li></ul></td></tr>
                                 </table>
-                            </div>
+                            </div> <!-- end table responsive div -->
                         </p>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+                    </div> <!-- end about test -->
+                </div> <!-- end col-md-6 -->
+            </div> <!-- end row -->
+        </div> <!-- end container -->
+    </div> <!-- end tf-about -->
 
     <!--=====================================
         -------- Flu-TrackR Visual --------
@@ -171,19 +164,18 @@
                     <h2><strong>Map View</strong></h2>
                     <div class="line">
                         <hr>
-                    </div>
-                </div>
-                <!-- =====================================
+                    </div> <!-- end line -->
+                </div> <!-- end section-title center -->
+                    <!-- ===============================================================================
                         -------- Filters --------
-                ==========================================-->
-
+                    ====================================================================================-->
                     <!-- Location Filter --------
                     ==========================================-->
                     <div id = "search_filter_area" class="mapFilterSpaceLarge">
                         <input type='text' name='searchmap' id='searchmap' placeholder='Search Location' title = "Type search location and press enter">
                         <input class = "mapBtn" id="searchMapBtn" type="button" value="Search"
                                onclick="moveToLocation()">
-                    </div>
+                    </div> <!-- end search_filter_area -->
 
                     <!-- =====================================
                             -------- Time Filter --------
@@ -193,40 +185,30 @@
                         <div id="time_filter_label"></div>
                         <input type="range" id="time_filter"  min="1" max="30" step="1" value="1"/>
 
-                    </div>
+                    </div> <!-- end time_filter_area -->
+            </div> <!-- end container -->
+                <div id ='map_container' title='Click hotspots to view tweet text'></div> <!-- end map_container -->
+                <div id ='text_display'></div> <!-- end text_display -->
+        </div> <!-- end overlay -->
+    </div> <!--end tf-meetFluTrakR -->
 
 
-                    <!--&lt;!&ndash; =====================================-->
-                            <!--&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; Play last 30 days -&#45;&#45;&#45;&#45;&#45;&#45;-->
-                    <!--========================================== &ndash;&gt;-->
-                    <!--<div id ="play_filter_area" class="mapFilterSpace">-->
-                        <!--<button  class = "mapBtn" id="play">Last 30 Days<i class="fa fa-play fa-lg" style="margin-left:25px"></i></button>-->
-                    <!--</div>-->
-                </div>
-                <div id ='map_container' title='Click hotspots to view tweet text'></div>
-                <div id ='text_display'></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Stats Section
-    ==========================================-->
     <div id="tf-services" class="text-center">
         <div class="container">
             <div class="section-title center">
                 <h2><strong>Statistics</strong></h2>
                 <div class="line">
                     <hr>
-                </div>
-                <div class="clearfix"></div>
+                </div> <!-- end line -->
+                <div class="clearfix"></div> <!-- end clearfix -->
                 <small><em>Take a look at the numbers so far</em></small>
-            </div>
-            <div class="space"></div>
+            </div> <!-- end section-title center -->
+            <div class="space"></div> <!-- end space -->
             <div class="row">
                 <div class="col-md-3 col-sm-6 service">
                     <div id="all_time" class="circle"></div>
                     <h4><strong>All Time</strong></h4>
-                    <p>Number of self diagnosed cases of Influenza recorded since launch.</p>
+                    <p>Number of self diagnosed cases of Influenza recorded since launch.<br/> Feb 2016</p>
                 </div>
                 <div class="col-md-3 col-sm-6 service">
                     <div id="this_year" class="circle"></div>
@@ -244,9 +226,9 @@
                     <h4><strong>Today</strong></h4>
                     <p>Number of self diagnosed cases of Influenza recorded today.</p>
                 </div>
-            </div>
-        </div>
-    </div>
+            </div> <!-- end row -->
+        </div> <!-- end container -->
+    </div> <!-- end tf - services -->
     <!-- Data Graph Section
     ==========================================-->
     <div id="tf-works">
@@ -254,9 +236,9 @@
             <div class = "row">
                 <div class = "chart_title">Numbers Per Week 2016</div>
                 <canvas id="weekly_chart" style = "width:100%"></canvas>
-            </div>
-        </div>
-    </div>
+            </div> <!-- end row -->
+        </div> <!-- end container -->
+    </div> <!-- end tf-works -->
 
     <!-- Contact Section
     ==========================================-->
@@ -265,41 +247,37 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-8 col-md-offset-2">
-
                         <div class="section-title center">
                             <h2>Feel free to <strong>contact me</strong></h2>
                             <div class="line">
                                 <hr>
-                            </div>
-                            <div class="clearfix"></div>
+                            </div> <!-- end line -->
+                            <div class="clearfix"></div> <!-- end clearfix -->
                             <small><em>We value any input or ideas you may have to share.
                                         Please feel free to contact us with any suggestions you may have.</em></small>
-                        </div>
-
+                        </div> <!-- end section-title center -->
                         <form>
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Email address</label>
                                         <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
-                                    </div>
-                                </div>
-                            </div>
+                                    </div> <!-- end form-group -->
+                                </div> <!-- end col-md-6 -->
+                            </div> <!-- end row -->
                             <div class="form-group">
                                 <label for="exampleInputEmail">Message</label>
                                 <textarea id="exampleInputEmail" class="form-control" rows="3"></textarea>
-                            </div>
+                            </div> <!-- end for-group -->
 
                             <button type="submit" class="btn tf-btn btn-default">Submit</button>
-                        </form>
-
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-    <div class="modal"><!-- Used for loading image --></div>
+                        </form> <!-- end form -->
+                    </div> <!-- end col-md-8 col-md-offset-2 -->
+                </div> <!-- end row -->
+            </div> <!-- end container -->
+        </div> <!-- end overlay -->
+    </div> <!-- end tf-contact -->
+    <div class="modal"><!-- Used for loading image --></div> <!-- end modal -->
     <nav id="footer">
         <div class="container">
             <div class="pull-left fnav">
@@ -312,9 +290,9 @@
                     <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
                     <li><a href="#"><i class="fa fa-twitter"></i></a></li>
                 </ul>
-            </div>
-        </div>
-    </nav>
+            </div> <!-- end pull-right fnav -->
+        </div> <!-- end container -->
+    </nav>  <!-- end footer -->
 
 
 

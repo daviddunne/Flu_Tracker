@@ -3,7 +3,7 @@ from utilities.text_classifier import VoteClassifier
 
 class ValidatorClass:
     def __init__(self, path_to_pickle_files):
-        self.banned_word_list = ['rt ', 'https']
+        self.banned_word_list = ['rt ', 'https', 'jab']
         self.text_classifier = VoteClassifier(path_to_pickle_files)
 
     def validate_location(self, location):

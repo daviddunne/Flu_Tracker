@@ -9,6 +9,7 @@ $(window).on('resize', function(){
     var weekly_line_chart = new Chart(ctx).Line(data, option);
 });
 
+// Draw weekly count line chart when doc loads
 $(document).ready(function (){
     var returnedData
     var labels = [];

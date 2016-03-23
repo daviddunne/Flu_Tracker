@@ -10,14 +10,13 @@ var mapdatapoints = [];
 function initMap () {
 
     // Enabling new cartography and themes.
-    var mapElement;
+    var mapContainer;
     var mapOptions;
     google.maps.visualRefresh = true;
-
-    document.getElementById("time_filter").value = 0;
+    // Initialise time filter settings
     document.getElementById("time_filter_label").innerHTML = "Slide left/right to view data for previous 30 days";
 
-    //Setting starting options of map , location, zoom level, type of map, UI and scroll wheel options.
+    // Set starting options of map , location, zoom level, type of map, UI and scroll wheel options.
     mapOptions = {
         center: defaultLocation,
         zoom: zoomValue,
@@ -30,24 +29,22 @@ function initMap () {
     };
 
     // Getting map DOM element.
-    mapElement = document.getElementById('map_container');
+    mapContainer = document.getElementById('map_container');
 
     // Creating a map with DOM element which is just obtained
-    map = new google.maps.Map(mapElement, mapOptions);
-
+    map = new google.maps.Map(mapContainer, mapOptions);
+    // add event listener for map to get location on click and display texts
     google.maps.event.addListener(map, 'click', function(e) {
         displayTweet_Texts(e.latLng.lat(), e.latLng.lng());
        });
-
-
+    // set selected index of slide-bar
     document.getElementById('time_filter').selectedIndex ="0";
-    //Creating the heatmap layer
+    //Creating the heat-map layer
     heatmap = new google.maps.visualization.HeatmapLayer({
         data: mapdatapoints
     });
-    // Adding heatmap layer to the map.
+    // Adding heat-map layer to the map.
     heatmap.setMap(map);
-
 }
 
 
@@ -55,6 +52,7 @@ function initMap () {
 // Repositions the map to location entered by user.
 //========================================================================================
 function moveToLocation(){
+    // Get location from location filter
     var location = document.getElementById('searchmap').value;
     // Find geolocation for location entered by user
     var geocoder =  new google.maps.Geocoder();
@@ -74,7 +72,6 @@ function moveToLocation(){
             // Set zoomValue variable to current zoom level
             zoomValue = map.getZoom();
           }
-
         else {
             // No result for filtered location.
             alert("Location not found.");
@@ -83,6 +80,7 @@ function moveToLocation(){
     });
 }
 
+// updating map overlay
 function updateHeatMap(){
     // Clear any existing overlay.
     heatmap.setMap(null);
@@ -94,7 +92,6 @@ function updateHeatMap(){
     // Set the overlay.
     heatmap.setMap(map);
 }
-
 // Pick up a Key Press for enter in location filter.
 document.onkeypress = keyPress;
 
@@ -108,6 +105,7 @@ function keyPress(e){
     }
 }
 
+// display texts of tweets
 function displayTweet_Texts(lat, lng) {
     var time_filter_label_text = $('#time_filter_label').text();
 
@@ -115,8 +113,10 @@ function displayTweet_Texts(lat, lng) {
     time_filter_label_text = time_filter_label_text.split(' ');
     var start_date = time_filter_label_text[2];
     var end_date = time_filter_label_text[4];
+    // activate loading gif
     $body = $("body");
     $body.addClass("loading");
+    // send ajax call to endpoint
     $.ajax({
         url: '/get/data/points/for/area',
         type: 'GET',
@@ -129,15 +129,15 @@ function displayTweet_Texts(lat, lng) {
         success: function(response) {
             var display = $('#text_display');
             var responseValue = response['data'];
-            var html = constructHTML(responseValue);
+            var html = constructHTMLTableForTweets(responseValue);
             $body.removeClass("loading");
             display.html(html);
             display.fadeIn('slow');
 
         }
     });
-
-    function constructHTML(points) {
+    // creates table for tweet texts
+    function constructHTMLTableForTweets(points) {
         console.log(points);
         var table_rows_html = "";
         var row_count = 0;
@@ -165,9 +165,8 @@ function displayTweet_Texts(lat, lng) {
 
         return html
     }
-
 }
-
+// Clear tweet text
 function clearText() {
     $('#text_display').fadeOut('slow');
     window.location.href ="#tf-meetFluTrakR"

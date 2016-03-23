@@ -1,7 +1,7 @@
 /**
  * Created by david on 01/01/16.
  */
-
+//  Script used when categorising tweets for training purposes
 $(function() {
     var $id = $('#tweetId');
 
@@ -48,7 +48,6 @@ $(function() {
                 else {
                     alert("Error: failed to update record");
                 }
-
             }
         });
     });
