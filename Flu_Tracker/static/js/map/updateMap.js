@@ -4,7 +4,7 @@ $(document).ready(function() {
 });
 
 $(document).ready(function(){
-    $('#time_filter').val(1);
+    document.getElementById("time_filter").value = 1;
     updateMapOnSliderChange();
 });
 
