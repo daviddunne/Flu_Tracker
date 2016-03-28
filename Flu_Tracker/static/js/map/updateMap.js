@@ -51,6 +51,10 @@ function updateMapOnSliderChange() {
                 updateHeatMap();
                 // Remove loading gif
                 $body.removeClass("loading");
+            },
+            error: function () {
+                $body.removeClass("loading");
+                create_bootstrap_alert('Error while updating map');
             }
         });
     }

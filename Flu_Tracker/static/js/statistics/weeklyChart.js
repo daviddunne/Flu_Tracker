@@ -11,19 +11,16 @@ $(window).on('resize', function(){
 
 // Draw weekly count line chart when doc loads
 $(document).ready(function (){
-    var returnedData
+    var returnedData;
     var labels = [];
     var values = [];
-
      $.ajax({
         url: '/get/weekly/chart/data',
         type: 'GET',
         dataType: "json",
         success: function (response) {
-
             var responseValue = response['results'];
             returnedData = responseValue['data'];
-
 
             for(var key in returnedData) {
                 if(returnedData.hasOwnProperty(key)) {
@@ -56,8 +53,9 @@ $(document).ready(function (){
             });
         },
         error: function () {
-            alert("Error while getting weekly graph data")
+            create_bootstrap_alert('Error while loading weekly count graph');
         }
     });
 });
+
 

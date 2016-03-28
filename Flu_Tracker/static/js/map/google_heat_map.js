@@ -74,7 +74,7 @@ function moveToLocation(){
           }
         else {
             // No result for filtered location.
-            alert("Location not found.");
+            create_bootstrap_alert("Location not found.");
             document.getElementById('searchmap').focus();
         }
     });
@@ -118,7 +118,7 @@ function displayTweet_Texts(lat, lng) {
     $body.addClass("loading");
     // send ajax call to endpoint
     $.ajax({
-        url: '/get/data/points/for/area',
+        //url: '/get/data/points/for/area',
         type: 'GET',
         data: {
             lat : lat,
@@ -134,6 +134,11 @@ function displayTweet_Texts(lat, lng) {
             display.html(html);
             display.fadeIn('slow');
 
+        },
+        error: function () {
+            $body.removeClass("loading");
+            create_bootstrap_alert('Error while retrieving text for location <strong>lat: </strong>' + lat +
+                                    '<strong> long: </strong>' + lng + ' between ' + start_date + ' and ' + end_date);
         }
     });
     // creates table for tweet texts

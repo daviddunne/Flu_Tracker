@@ -36,7 +36,6 @@
     <script type="text/javascript" src="{{ url_for('static', filename ='js/map/updateMap.js')}}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename ='js/map/google_heat_map.js')}}"></script>
     <script src = "static/js/map/google_heat_map.js"></script>
-    <script src = "static/js/map/playTimeline.js"></script>
 
     <!-- Statistics Scripts -->
     <script type="text/javascript" src="{{ url_for('static', filename ='js/statistics/stats.js')}}"></script>
@@ -62,7 +61,7 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
-  <body onload="initMap(), updateSlider()">
+  <body onload="initMap(), updateMapOnSliderChange()">
 
     <!-- Navigation
     ==========================================-->
@@ -277,7 +276,8 @@
             </div> <!-- end container -->
         </div> <!-- end overlay -->
     </div> <!-- end tf-contact -->
-    <div class="modal"><!-- Used for loading image --></div> <!-- end modal -->
+    <div class="loadingImage"></div> <!-- end loadingImage -->
+    <div id="alert"></div><!-- end alert div -->
     <nav id="footer">
         <div class="container">
             <div class="pull-left fnav">
@@ -307,5 +307,6 @@
     <!-- Javascripts
    <!-- ================================================== -->
     <script type="text/javascript" src="{{ url_for('static', filename='js/main.js')}}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrapAlertCreator.js')}}"></script>
   </body>
 </html>
