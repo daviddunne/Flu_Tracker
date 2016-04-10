@@ -1,10 +1,10 @@
-from utilities.text_classifier import VoteClassifier
+from utilities.text_classifier import TweetClassifier
 
 
 class ValidatorClass:
     def __init__(self, path_to_pickle_files):
         self.banned_word_list = ['rt ', 'https', 'jab']
-        self.text_classifier = VoteClassifier(path_to_pickle_files)
+        self.text_classifier = TweetClassifier(path_to_pickle_files)
 
     def validate_location(self, location):
         if location is None:
@@ -19,6 +19,6 @@ class ValidatorClass:
         for banned_word in self.banned_word_list:
             if banned_word in text_from_tweet:
                 return False
-        text_classification = self.text_classifier.sentiment(text_from_tweet)
-        return text_classification
+        validText = self.text_classifier.sentiment(text_from_tweet)
+        return validText
 

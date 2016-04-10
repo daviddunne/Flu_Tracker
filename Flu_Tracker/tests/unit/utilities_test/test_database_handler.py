@@ -77,7 +77,7 @@ class DatabaseHandlerTests(unittest.TestCase):
                           'text': "test_text entered by write_method"}
 
         # Execute
-        self.test_dbh.write_map_point(record)
+        self.test_dbh.write_map_point_to_database(record)
 
         # Check
         self.assertEqual(initial_collection_count + 1, self.test_dbh.db.map_points.find().count())
@@ -177,12 +177,11 @@ class DatabaseHandlerTests(unittest.TestCase):
     def test_get_count_for_time_period_returns_correct_count_for_time_period(self):
         self.assertEqual(3, self.test_dbh.get_count_for_time_period('20160101', '20160101'))
 
-    @patch('graphs.date_ranges.get_date_ranges_for_this_year')
-    def test_get_instance_count_for_each_week_of_this_year_returns_dict_containing_correct_counts(self, test_patch):
+    def test_get_instance_count_for_each_week_of_this_year_returns_dict_containing_correct_counts(self):
         # Arrange
-        test_patch.return_value = {'week0': {'start_date': '20151228', 'end_date': '20160103'}}
+        mock_get_date_ranges= {'week0': {'start_date': '20151228', 'end_date': '20160103'}}
         expected_results = collections.OrderedDict([('0', 3)])
 
         # Check
         self.assertEqual(expected_results,
-                         self.test_dbh.get_instance_count_for_each_week_of_this_year())
+                         self.test_dbh.get_instance_count_for_each_week_of_this_year(mock_get_date_ranges))

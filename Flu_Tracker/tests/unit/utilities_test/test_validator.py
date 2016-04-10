@@ -28,4 +28,7 @@ class ValidatorTests(unittest.TestCase):
         self.assertFalse(self.test_validator.validate_text_from_tweet(''))
 
     def test_validate_text_returns_False_when_text_contains_word_in_banned_word_list(self):
-        self.assertFalse(self.test_validator.validate_text_from_tweet('invalid text because has rt meaning retweet'))
+        self.assertFalse(self.test_validator.validate_text_from_tweet('invalid text because has jab'))
+
+    def test_validate_text_returns_True_when_text_is_valid(self):
+        self.assertTrue(self.test_validator.validate_text_from_tweet('I have manflu'))

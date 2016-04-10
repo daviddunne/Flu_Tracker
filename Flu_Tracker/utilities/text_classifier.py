@@ -4,7 +4,7 @@ from statistics import mode
 from nltk.tokenize import word_tokenize
 
 
-class VoteClassifier(ClassifierI):
+class TweetClassifier(ClassifierI):
     def __init__(self, path_to_pickles):
         self.path_to_pickles = path_to_pickles
         self._classifiers = self.load_classifiers()

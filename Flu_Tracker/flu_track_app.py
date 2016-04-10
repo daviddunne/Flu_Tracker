@@ -1,12 +1,12 @@
 from flask import Flask, render_template, request, jsonify, make_response
 from utilities.database_handler import DatabaseHandler
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
+
 
 
 app = Flask(__name__)
 
 database_handler = DatabaseHandler('ds061335.mongolab.com', 61335, 'flutrackapp', 'flutrackapp')
-
 
 
 @app.route('/', methods=['GET'])
@@ -67,8 +67,8 @@ def get_stats_counts():
     year = str(request.values.get('year'))
     date = year+month+day
     day_count = database_handler.get_today_count(date)
-    year_count = database_handler.get_yearly_count(year)
     month_count = database_handler.get_month_count(year + month)
+    year_count = database_handler.get_yearly_count(year)
     all_time_count = database_handler.get_total_count()
     values = {'all': all_time_count, 'year': year_count, 'month': month_count, 'today': day_count}
 
@@ -77,7 +77,9 @@ def get_stats_counts():
 
 @app.route('/get/weekly/chart/data', methods=['GET'])
 def get_weekly_chart_date():
-    data = database_handler.get_instance_count_for_each_week_of_this_year()
+    # Get the start and end dates for each week of this year
+    date_ranges = get_date_ranges_for_this_year()
+    data = database_handler.get_instance_count_for_each_week_of_this_year(date_ranges)
     values = {'data': data}
 
     return make_response(jsonify(results=values), 200)
@@ -90,7 +92,7 @@ def get_data_points_for_area():
     :return: list of map point records
     """
     # Define the area and date ranges for database query
-    max_lat, max_lng, min_lat, min_lng, start_date, end_date = define_parameters_for_get_map_point_data_database_query()
+    max_lat, max_lng, min_lat, min_lng, start_date, end_date = define_params_database_query()
     # Query the database
     query_result = database_handler.get_map_point_data(max_lat, max_lng, min_lat, min_lng, start_date, end_date)
     # Extract the points from the query
@@ -100,21 +102,21 @@ def get_data_points_for_area():
     return jsonify(values)
 
 
-def define_parameters_for_get_map_point_data_database_query():
+def define_params_database_query():
     """
     Generates the query arguments required to get text from all tweets within a 50km square of map click and
     within date range specified on a scrollbar
     :param: none
     :returns: maximum latitude, maximum Longitude, minimum latitude, minimum longitude, start date, end date
     """
-    fifty_km = 0.5
+    ten_km = 0.1
     lat = request.values.get('lat')
     lng = request.values.get('lng')
 
-    max_lat = float(lat) + fifty_km
-    min_lat = float(lat) - fifty_km
-    max_lng = float(lng) + fifty_km
-    min_lng = float(lng) - fifty_km
+    max_lat = float(lat) + ten_km
+    min_lat = float(lat) - ten_km
+    max_lng = float(lng) + ten_km
+    min_lng = float(lng) - ten_km
     start_date = (request.values.get('start_date')).replace('-', '')
     end_date = (request.values.get('end_date')).replace('-', '')
 
@@ -137,9 +139,11 @@ def extract_points_from_query_result(data):
 def get_lats_and_longs_from_query_result(result):
     points = []
     for record in result:
-        point = [record['lat'], record['long']]
-        points.append(point)
-
+        try:
+            point = [record['lat'], record['long']]
+            points.append(point)
+        except KeyError:
+            pass
     return points
 
 
@@ -178,6 +182,32 @@ def normalise_date(date):
         date = date[:4] + '-' + date[4:6] + '-' + date[6:]
 
     return date
+
+
+def get_date_ranges_for_this_year():
+    # Gets the start and end daes for each week of the current year
+    today = date.today()
+    week = today.isocalendar()[1]
+    week_dict = {}
+    current_week = 0
+    while current_week <= week:
+            start = get_week_start_date(2016, current_week)
+            end = start + timedelta(days=6)
+            start = start.strftime('%Y%m%d')
+            end = end.strftime('%Y%m%d')
+            week_dict["week" + str(current_week)] = {"start_date": start, "end_date": end}
+            current_week += 1
+    return week_dict
+
+
+def get_week_start_date(year, week):
+    d = date(year, 1, 1)
+    delta_days = d.isoweekday() - 1
+    delta_weeks = week
+    if year == d.isocalendar()[0]:
+        delta_weeks -= 1
+    delta = timedelta(days=-delta_days, weeks=delta_weeks)
+    return d + delta
 
 app.secret_key = 'Youwillneverguess'
 
