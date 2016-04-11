@@ -1,17 +1,18 @@
-import nltk
-import random
-from nltk.classify.scikitlearn import SklearnClassifier
+#   Author: David Dunne,    Student Number: C00173649,      Created Dec 2015
+
 import pickle
-
-
-from sklearn.naive_bayes import MultinomialNB, BernoulliNB
-from sklearn.linear_model import LogisticRegression, SGDClassifier
-from sklearn.svm import LinearSVC, NuSVC
-
-from nltk.classify import ClassifierI
+import random
 from statistics import mode
 
+import nltk
+from nltk.classify import ClassifierI
+from nltk.classify.scikitlearn import SklearnClassifier
 from nltk.tokenize import word_tokenize
+from sklearn.linear_model import LogisticRegression, SGDClassifier
+from sklearn.naive_bayes import MultinomialNB, BernoulliNB
+from sklearn.svm import LinearSVC, NuSVC
+
+from utilities.context import project_root_dir
 
 
 class VoteClassifier(ClassifierI):
@@ -35,7 +36,7 @@ class VoteClassifier(ClassifierI):
         conf = choice_votes / len(votes)
         return conf
 
-path_to_pickle_files = "../classifiers/pickle_files/"
+path_to_pickle_files = project_root_dir + "/classifiers/pickle_files/"
 
 
 def save_to_pickle_file(path, filename, object):

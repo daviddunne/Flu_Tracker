@@ -1,29 +1,30 @@
-/**
- * Created by david on 28/01/16.
- */
+//  Author: David Dunne,    Student Number: C00173649,    Date Created: 28th Jan 2016
+
 var data
 var option
+//========================================================================================
 //Re-draw chart when window size changes
+//========================================================================================
 $(window).on('resize', function(){
     var ctx = document.getElementById("weekly_chart").getContext('2d');
     var weekly_line_chart = new Chart(ctx).Line(data, option);
+
 });
 
+//========================================================================================
 // Draw weekly count line chart when doc loads
+//========================================================================================
 $(document).ready(function (){
-    var returnedData
+    var returnedData;
     var labels = [];
     var values = [];
-
      $.ajax({
         url: '/get/weekly/chart/data',
         type: 'GET',
         dataType: "json",
         success: function (response) {
-
             var responseValue = response['results'];
             returnedData = responseValue['data'];
-
 
             for(var key in returnedData) {
                 if(returnedData.hasOwnProperty(key)) {
@@ -56,8 +57,9 @@ $(document).ready(function (){
             });
         },
         error: function () {
-            alert("Error while getting weekly graph data")
+            create_bootstrap_alert('Error while loading weekly count graph');
         }
     });
 });
+
 

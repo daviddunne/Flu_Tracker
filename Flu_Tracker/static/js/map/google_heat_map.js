@@ -1,8 +1,12 @@
+//  Author: David Dunne,    Student Number: C00173649, Created Jan 2016
+
 // Define global variables.
 var map, heatmap, userDefinedLocation;
-var defaultLocation = new google.maps.LatLng(53.574543437408934, -15.490722653750026);// Default location of Mid Atlantic Ocean for now
+// Default location of Mid Atlantic Ocean
+var defaultLocation = new google.maps.LatLng(53.574543437408934, -15.490722653750026);
 var zoomValue = 4;
 var mapdatapoints = [];
+
 
 //========================================================================================
 // Initilise map.
@@ -74,13 +78,15 @@ function moveToLocation(){
           }
         else {
             // No result for filtered location.
-            alert("Location not found.");
+            create_bootstrap_alert("Location not found.");
             document.getElementById('searchmap').focus();
         }
     });
 }
 
-// updating map overlay
+//========================================================================================
+// Function to update map overlay
+//========================================================================================
 function updateHeatMap(){
     // Clear any existing overlay.
     heatmap.setMap(null);
@@ -95,7 +101,10 @@ function updateHeatMap(){
 // Pick up a Key Press for enter in location filter.
 document.onkeypress = keyPress;
 
+
+//========================================================================================
 // Function to call moveToLocation with point when enter pressed on location input box.
+//========================================================================================
 function keyPress(e){
     var x = e || window.event;
     var key = (x.keyCode || x.which);
@@ -105,17 +114,19 @@ function keyPress(e){
     }
 }
 
-// display texts of tweets
+//========================================================================================
+// Function to display texts of tweets
+//========================================================================================
 function displayTweet_Texts(lat, lng) {
-    var time_filter_label_text = $('#time_filter_label').text();
-
-    //get the date elements from text of label
-    time_filter_label_text = time_filter_label_text.split(' ');
-    var start_date = time_filter_label_text[2];
-    var end_date = time_filter_label_text[4];
     // activate loading gif
     $body = $("body");
     $body.addClass("loading");
+    //get the date elements from text of label
+    var time_filter_label_text = $('#time_filter_label').text();
+    time_filter_label_text = time_filter_label_text.split(' ');
+    var start_date = time_filter_label_text[2];
+    var end_date = time_filter_label_text[4];
+
     // send ajax call to endpoint
     $.ajax({
         url: '/get/data/points/for/area',
@@ -134,11 +145,15 @@ function displayTweet_Texts(lat, lng) {
             display.html(html);
             display.fadeIn('slow');
 
+        },
+        error: function () {
+            $body.removeClass("loading");
+            create_bootstrap_alert('Error while retrieving text for location <strong>lat: </strong>' + lat +
+                                    '<strong> long: </strong>' + lng + ' between ' + start_date + ' and ' + end_date);
         }
     });
     // creates table for tweet texts
     function constructHTMLTableForTweets(points) {
-        console.log(points);
         var table_rows_html = "";
         var row_count = 0;
         for(var i = 0; i < points.length; i++) {
@@ -154,24 +169,89 @@ function displayTweet_Texts(lat, lng) {
 
         var html =
                 "<table class='table' id='map_click_data'>" +
-                    "<tr><th colspan='4 id='table-heading'><h4>Geo-Relevant Data</h4></br></th></tr>" +
-                    "<tr><th colspan='3'><strong>Instance Count</strong></th><td>" + row_count + "</td></tr>"
-                    "<tr><td colspan='3'><strong>50km Radius around point <br/>Latitude:  </strong>" + lat + "<strong><br/>Longitude:  </strong>" + lng + "</td>" +
-                    "<td>Please note no filter applied to text. User discretion is advised.</td></tr>" +
-                    "<tr><th>Date</th><th>Latitude</th><th>Longitude</th><th>Text</th></tr>";
+                    "<tr><th colspan='4' id='table-heading' >Geo-Relevant Data</br></th></tr>" +
+                    "<tr><th colspan='4' style='font-weight:500; font-size:20px;'>Instance Count: "+ row_count + " </th></tr>" +
+                    "<tr><td colspan='4'><span style='font-weight:500; font-size:20px;'>Click Location: </span>" +
+                    "<i style='color:#FCAC45;'>Latitude: </i>" + lat + " <i style='color:#FCAC45;'>Longitude: </i>" + lng + "</td></tr>" +
+                    "<tr><td colspan='4' style='color:#FCAC45;'>Please note no filter applied to text. User discretion is advised.</td></tr>" +
+                    "<tr style='font-weight:500; font-size:20px;'><th>Date</th><th>Latitude</th><th>Longitude</th><th>Text</th></tr>";
 
         html = html + table_rows_html;
-        html = html + "</table><button type='button' class='mapBtn' onclick='clearText()'>Clear All</button><input"
+        html = html + "</table><button type='button' class='mapBtn' onclick='hideTweetText()'>Clear All</button><input"
 
         return html
     }
 }
-// Clear tweet text
-function clearText() {
+//========================================================================================
+// HIDE TWEET TEXT DIV
+//========================================================================================
+function hideTweetText() {
     $('#text_display').fadeOut('slow');
     window.location.href ="#tf-meetFluTrakR"
 }
 
+//========================================================================================
+// UPDATE MAP WHEN PAGE LOADS
+//========================================================================================
+$(document).ready(function() {
+    $('#time_filter').on('change', updateMapOnSliderChange);
+});
 
+$(document).ready(function(){
+    document.getElementById("time_filter").value = 1;
+    updateMapOnSliderChange();
+});
 
+//========================================================================================
+// UPDATE MAP FUNCTION WHEN SLIDER BAR IS CHANGED BY THE USER
+//========================================================================================
+function updateMapOnSliderChange() {
+    var timeFromFilter = $('#time_filter').val();
+    // Display loading gif
+    $body = $("body");
+    $body.addClass("loading");
+    // Hide text from tweets if present
+    $('#text_display').fadeOut();
+    // Send Ajax call to API
+    $.ajax({
+        url: '/getmappoints',
+        type: 'GET',
+        data: {time : timeFromFilter},
+        dataType: "json",
+        success: function(response) {
+            // Extract data from response
+            var responseValue = response['results'];
+            var points = responseValue['datapoints'];
+            var startdate = "" + responseValue['start_date'];
+            var enddate = "" + responseValue['end_date'];
 
+            // Set label for time slider
+            document.getElementById("time_filter_label").innerHTML = "Date Range: " + startdate  + " - " + enddate;
+           // Clear mapdatapoint array
+            mapdatapoints = [];
+
+            // Get the number of entries in the data returned from ajax call
+            var len = points.length;
+
+            // Loop through data
+            for(var i = 0; i < len; i++) {
+                // Select point from array
+                var point = points[i];
+                // Extract latitude and longitude from point
+                var lat = point[0];
+                var long = point[1];
+                // Create googlemap points with lat and long
+                var gPoint = new google.maps.LatLng(parseFloat(lat), parseFloat(long));
+                // Add googlemap point to mapdatapoints array
+                mapdatapoints.push(gPoint);
+            }
+            updateHeatMap();
+            // Remove loading gif
+            $body.removeClass("loading");
+        },
+        error: function () {
+            $body.removeClass("loading");
+            create_bootstrap_alert('Error while updating map');
+        }
+    });
+}

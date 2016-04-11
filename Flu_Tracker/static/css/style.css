@@ -564,7 +564,7 @@ nav#footer p{
 	-moz-border-radius: 50px;
 	-webkit-border-radius: 50px;
 	border-radius: 50px;
-    border_width: 3px;
+    border-width: 3px;
     border-style: solid;
     border-color: #ff6600;
     font-size: large;
@@ -572,7 +572,8 @@ nav#footer p{
 	padding-top: 30px;
 }
 .row #weekly_chart{
-	width: 100%;
+	width: 100%; !important;
+	max-width: 1300px;
 	margin: 0 auto;
 
 
@@ -580,13 +581,15 @@ nav#footer p{
 .container .chart_title{
 	width: 100%;
 	text-align:center;
+	text-transform: uppercase;
+	font-size: 18px;
+	font-weight: bold;
 }
 
 .table tbody tr th #table_heading h4 {
 	color: #ff6600; !important;
 }
-
-.modal {
+.loadingImage {
     display:    none;
     position:   fixed;
     z-index:    1000;
@@ -599,7 +602,6 @@ nav#footer p{
                 50% 50%
                 no-repeat;
 }
-
 /* When the body has the loading class, we turn
    the scrollbar off with overflow:hidden */
 body.loading {
@@ -608,8 +610,19 @@ body.loading {
 
 /* Anytime the body has the loading class, our
    modal element will be visible */
-body.loading .modal {
+body.loading .loadingImage {
     display: block;
 }
+#alert {
+	display:    block;
+    position:   fixed;
+    z-index: 1000;
+    top: 50px;
+    left: 0;
+	width: 100%;
+}
 
-
+#table-heading {
+	font-weight: 900;
+	font-size: 20px;
+}

@@ -1,3 +1,5 @@
+#   Author: David Dunne,    Student Number: C00173649,      Created Jan 2016
+
 import unittest
 import unittest.mock
 from unittest.mock import Mock
@@ -7,9 +9,6 @@ from flask import json
 import collections
 import datetime
 
-# Reponse Codes
-success_response_status_code = 200
-method_not_allowed_status_code = 405
 
 
 class FlaskAppTester(unittest.TestCase):
@@ -38,35 +37,6 @@ class FlaskAppTester(unittest.TestCase):
         self.dbh_mock.get_map_point_data.return_value = [{'lat': 0, 'long': 0, 'date': '01012016', 'text': "test text"}]
         self.datetime_mock.now.return_value = datetime.datetime.strptime('2016-01-05 00:00:00.000001',
                                                                          '%Y-%m-%d %H:%M:%S.%f')
-
-    def test_all_endpoints_status_codes(self):
-
-        # Root Endpoint
-        response = self.app.get('/')
-        self.assertEqual(response.status_code, success_response_status_code)
-        response = self.app.post('/')
-        self.assertEqual(response.status_code, method_not_allowed_status_code)
-
-        # /getmappoints Endpoint
-        request_params = dict(time=1)
-        # self.dbh_mock.get_map_points_for_five_dates.return_value = [dict(lat="testlat", long='testlong')]
-        response = self.app.get('/getmappoints', data=request_params)
-        self.assertEqual(response.status_code, success_response_status_code)
-
-        response = self.app.post('/getmappoints')
-        self.assertEqual(response.status_code, method_not_allowed_status_code)
-
-        # /categorise Endpoint
-        response = self.app.get('/categorise')
-        self.assertEqual(response.status_code, success_response_status_code)
-        response = self.app.post('/categorise')
-        self.assertEqual(response.status_code, method_not_allowed_status_code)
-
-        # /update/tweet/sentiment
-        response = self.app.get('/update/tweet/sentiment')
-        self.assertEqual(response.status_code, method_not_allowed_status_code)
-        response = self.app.post('/update/tweet/sentiment')
-        self.assertEqual(response.status_code, method_not_allowed_status_code)
 
     def test_get_request_to_root_returns_response_data_containing_FluTrakr_html_template(self):
         expected_in_response = '<title>Flu-Trakr</title>'

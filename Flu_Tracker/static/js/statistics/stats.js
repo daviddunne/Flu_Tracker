@@ -1,6 +1,6 @@
-/**
- * Created by david on 27/01/16.
- */
+//  Author: David Dunne,    Student Number: C00173649,    Date Created: Jan 2016
+
+
 // Scripts to display statistics/counts
 $(document).ready(function(){
 
@@ -22,16 +22,17 @@ function setStatsCounts(day, month, year){
             var month_count = responseValue['month'];
             var year_count = responseValue['year'];
             var all_count = responseValue['all'];
-            $('#today').html(today_count)
-            $('#this_month').html(month_count)
-            $('#this_year').html(year_count)
-            $('#all_time').html(all_count)
+            $('#today').html(today_count);
+            $('#this_month').html(month_count);
+            $('#this_year').html(year_count);
+            $('#all_time').html(all_count);
         },
         error: function () {
-            $('#today').html('Error')
-            $('#this_month').html('Error')
-            $('#this_year').html('Error')
-            $('#all_time').html('Error')
+            $('#today').html('Error');
+            $('#this_month').html('Error');
+            $('#this_year').html('Error');
+            $('#all_time').html('Error');
+            create_bootstrap_alert('Error while retrieving counts for statistics');
         }
     });
 };

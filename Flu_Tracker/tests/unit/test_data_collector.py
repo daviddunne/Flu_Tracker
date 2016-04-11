@@ -1,3 +1,5 @@
+#   Author: David Dunne,    Student Number: C00173649,      Created Jan 2016
+
 import time
 import unittest
 import unittest.mock
@@ -8,7 +10,7 @@ from utilities.database_handler import DatabaseHandler
 
 class DataCollectorTests(unittest.TestCase):
     def setUp(self):
-        self.test_listener = data_collector.Listener()
+        self.test_listener = data_collector.DataCollector()
         self.setup_mocks()
 
     def setup_mocks(self):
@@ -48,23 +50,23 @@ class DataCollectorTests(unittest.TestCase):
 
     def test_add_location_to_record(self):
 
-        self.test_listener.add_location_attributes_to_record('test address', self.mock_latitude,
-                                                             self.mock_longitude, self.mock_record)
+        self.test_listener.add_to_record('test address', self.mock_latitude,
+                                         self.mock_longitude, self.mock_record)
 
         self.assertEqual(self.mock_record['address'], 'test address')
         self.assertEqual(self.mock_record['latitude'], self.mock_latitude)
         self.assertEqual(self.mock_record['longitude'], self.mock_longitude)
 
-    @patch.object(DatabaseHandler, "write_map_point")
-    def test_record_map_point_calls_database_handler(self, mock_write_map_point):
-        mock_write_map_point.return_value = None
+    @patch.object(DatabaseHandler, "write_map_point_to_database")
+    def test_record_map_point_calls_database_handler(self, mock_write_map_point_to_database):
+        mock_write_map_point_to_database.return_value = None
         expected_args = {'date': int(self.mock_timestamp), 'lat': self.mock_latitude,
                          'long': self.mock_longitude, 'text':self.valid_text_mock}
 
         self.test_listener.record_map_point(self.mock_latitude, self.mock_longitude,
                                             self.mock_timestamp, self.valid_text_mock)
 
-        mock_write_map_point.assert_called_with(expected_args)
+        mock_write_map_point_to_database.assert_called_with(expected_args)
 
     def test_on_data(self):
 

@@ -1,3 +1,5 @@
+#   Author: David Dunne,    Student Number: C00173649, Created Jan 2016
+
 import unittest
 from unittest.mock import patch
 from unittest.mock import Mock
