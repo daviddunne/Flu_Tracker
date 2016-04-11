@@ -1,14 +1,15 @@
 //  Author: David Dunne,    Student Number: C00173649,    Date Created: 28th Jan 2016
 
-var data
-var option
+var data;
+var option;
 //========================================================================================
 //Re-draw chart when window size changes
 //========================================================================================
 $(window).on('resize', function(){
+    var width = $('#text_display').width();
+    $('#weekly_chart').css({"width":width, "height":"auto"});
     var ctx = document.getElementById("weekly_chart").getContext('2d');
     var weekly_line_chart = new Chart(ctx).Line(data, option);
-
 });
 
 //========================================================================================

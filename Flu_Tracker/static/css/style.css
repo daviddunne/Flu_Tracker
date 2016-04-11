@@ -573,6 +573,7 @@ nav#footer p{
 }
 .row #weekly_chart{
 	width: 100%; !important;
+	height: auto;
 	max-width: 1300px;
 	margin: 0 auto;
 
