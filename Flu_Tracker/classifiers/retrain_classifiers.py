@@ -3,7 +3,7 @@ import random
 from nltk.classify.scikitlearn import SklearnClassifier
 import pickle
 
-from utilities.text_classifier import VoteClassifier
+from utilities.text_classifier import TweetClassifier
 from sklearn.naive_bayes import MultinomialNB, BernoulliNB
 from sklearn.linear_model import LogisticRegression, SGDClassifier
 from sklearn.svm import LinearSVC, NuSVC
@@ -87,5 +87,5 @@ NuSVC_classifier.train(training_set)
 print("NuSVC_classifier accuracy percent:", (nltk.classify.accuracy(NuSVC_classifier, testing_set))*100)
 save_to_pickle_file(path_to_pickle_files, "NuSVC_classifier.pickle", NuSVC_classifier)
 
-voted_classifier = VoteClassifier("pickle_files/")
+voted_classifier = TweetClassifier("pickle_files/")
 print("voted_classifier accuracy percent:", (nltk.classify.accuracy(voted_classifier, testing_set))*100)

@@ -1,3 +1,4 @@
+#   Author: David Dunne,    Student Number: C00173649, Created Jan 2016
 import unittest
 from unittest.mock import patch
 from utilities.database_handler import DatabaseHandler
@@ -14,7 +15,6 @@ class DatabaseHandlerTests(unittest.TestCase):
     def setup_test_dbh_initial_contents(self):
         self.setup_map_points_collection()
         self.setup_english_tweets_collection()
-        self.setup_non_english_tweets_collection()
 
     def setup_map_points_collection(self):
         # clear previous test records  [ CAUTION CHECK THAT DB OS NOT PRODUCTION DB ]
@@ -58,18 +58,6 @@ class DatabaseHandlerTests(unittest.TestCase):
         # Check
         self.assertEqual(initial_collection_count + 1, self.test_dbh.db.english_tweets.find().count())
         self.assertEqual(record, self.test_dbh.db.english_tweets.find_one({'created': 20160102}))
-
-    def test_write_non_english_tweets_to_database_writes_record_to_test_db(self):
-        initial_collection_count = 6
-        record = {'created': int('20160102'), 'user_language': 'pt',
-                  'address': 'test address', 'latitude': '000000', 'longitude': '000000'}
-
-        # Execute
-        self.test_dbh.write_non_english_tweets_to_database(record)
-
-        # Check
-        self.assertEqual(initial_collection_count + 1, self.test_dbh.db.non_english_tweets.find().count())
-        self.assertEqual(record, self.test_dbh.db.non_english_tweets.find_one({'created': 20160102}))
 
     def test_write_map_point_writes_record_to_test_db(self):
         initial_collection_count = 6

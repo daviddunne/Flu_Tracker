@@ -1,6 +1,6 @@
-/**
- * Created by david on 27/01/16.
- */
+//  Author: David Dunne,    Student Number: C00173649,    Date Created: Jan 2016
+
+
 // Scripts to display statistics/counts
 $(document).ready(function(){
 

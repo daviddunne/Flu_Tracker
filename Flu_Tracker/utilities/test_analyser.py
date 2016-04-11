@@ -1,3 +1,5 @@
+#   Author: David Dunne,    Student Number: C00173649,      Created Dec 2015
+
 import pickle
 import random
 from statistics import mode

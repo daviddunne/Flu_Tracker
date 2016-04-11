@@ -1,3 +1,5 @@
+#   Author: David Dunne,    Student Number: C00173649,      Created Nov 2015
+
 from tweepy import Stream
 from tweepy import OAuthHandler
 from tweepy.error import TweepError
@@ -37,8 +39,17 @@ class DataCollector(StreamListener):
         self.database_handler = DatabaseHandler(dbURL, dbPort,dbUser, dbPasswd)
 
     def on_data(self, raw_data):
-        # Load the raw data
+        """
+        When Listener detects a tweet with the keywords this method is called to handle the tweet.
+        Sequence:
+        - Load the json data
+        - Validate tweet
+        - Store if valid
+        :param raw_data:
+        :return: nothing
+        """
         try:
+            # Load the raw data
             json_data = json.loads(raw_data)
 
             # Get some required details from json data
@@ -67,19 +78,44 @@ class DataCollector(StreamListener):
             logger.logging.exception('Error during on_data method')
 
     def language_is_english(self, language):
+        """
+        Checks is language provided is english
+        :param language:
+        :return boolean value True/False
+        """
         return (language == 'en') or (language == 'en-gb')
 
     def add_to_record(self, address, latitude, longitude, record):
-        # Add location values to record
+        """
+        Add location values to record which is a dictionary
+        :param address: string value for address
+        :param latitude: float value for latitude
+        :param longitude: float value for longitude
+        :param record: dictionary
+        :return: nothing
+        """
         record['address'] = address
         record['latitude'] = latitude
         record['longitude'] = longitude
 
     def record_map_point(self, latitude, longitude, timestamp, text):
+        """
+        creats a record(dictionary) for map point and calls the database handler to store it
+        :param latitude: float value for latitude
+        :param longitude: float value for longitude
+        :param timestamp: string value for timestamp
+        :param text: string value for text
+        :return: nothing
+        """
         map_point_record = {'date': int(timestamp), 'lat': latitude, 'long': longitude, 'text': text}
         self.database_handler.write_map_point_to_database(map_point_record)
 
     def get_data_from_json_data(self, json_data):
+        """
+        extracts appropriate data from json data, if KeyError occurs sets attribute to unknown or none
+        :param json_data:
+        :return: user_id(string), text(string), user_language(string), location(string), timestamp(string)
+        """
         try:
             user_id = json_data['user']['id_str']
 
@@ -92,10 +128,10 @@ class DataCollector(StreamListener):
             logger.logging.exception('KeyError while accessing user language')
             user_language = 'unknown'
         try:
-            loc = json_data['user']['location']
+            location = json_data['user']['location']
         except KeyError:
             logger.logging.exception('KeyError while accessing user location')
-            loc = None
+            location = None
         try:
             text = json_data['text'].lower()
         except KeyError:
@@ -105,9 +141,13 @@ class DataCollector(StreamListener):
         # Get time tweet picked up
         timestamp = self.get_timestamp()
 
-        return user_id, text, user_language, loc, timestamp
+        return user_id, text, user_language, location, timestamp
 
     def get_timestamp(self):
+        """
+        creates a timestamp in string format
+        :return: timestamp(string)
+        """
         now = datetime.datetime.now()
         day = str(now.day)
         month = str(now.month)
@@ -125,6 +165,11 @@ class DataCollector(StreamListener):
 
 
 def runDataCollector():
+    """
+    create stream to listen to twitter for keywords
+    when keyword is detected tweet is handled by DataCollector instance
+    :return: nothing
+    """
     # Authenticate and connect to twitter
     auth = OAuthHandler(ckey, csecret)
     auth.set_access_token(atoken, asecret)

@@ -1,3 +1,5 @@
+#   Author: David Dunne,    Student Number: C00173649,      Created Jan 2016
+
 import time
 import unittest
 import unittest.mock
