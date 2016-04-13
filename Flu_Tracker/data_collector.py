@@ -161,7 +161,7 @@ class DataCollector(StreamListener):
         return timestamp
 
     def on_error(self, status_code):
-        logging.error('Twitter Stream returned status code:')
+        logging.error('Twitter Stream returned status code:' + str(status_code))
 
 
 def runDataCollector():
@@ -188,9 +188,9 @@ def runDataCollector():
             i -= 1
             time.sleep(1)
         twitterStream.filter(track=keyword_list)
-    except Exception as e:
-        print('Unknown exception occurred when running tweepy')
-        logger.logging.critical('Unknown exception occurred when running tweepy')
+    # except Exception:
+    #     print('Unknown exception occurred when running tweepy')
+    #     logger.logging.critical('Unknown exception occurred when running tweepy')
 
 if __name__ == '__main__':
     runDataCollector()
