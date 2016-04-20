@@ -2,6 +2,7 @@
 
 from flask import Flask, render_template, request, jsonify, make_response
 from utilities.database_handler import DatabaseHandler
+from utilities import email_sender
 from datetime import date, datetime, timedelta
 
 
@@ -106,7 +107,7 @@ def get_stats_counts():
 
 
 @app.route('/get/weekly/chart/data', methods=['GET'])
-def get_weekly_chart_date():
+def get_weekly_chart_data():
     """
     API endpoint for retrieving counts for each week of the current year
     :return: Dictionary containing counts for each week of the current year
@@ -135,6 +136,19 @@ def get_data_points_for_area():
 
     return jsonify(values)
 
+@app.route('/send/email', methods=['POST'])
+def send_email():
+    """
+    Sends email when user submits message
+    :return: Nothing
+    """
+    email = str(request.values.get('email'))
+    subject = str(request.values.get('subject'))
+    message = str(request.values.get('message'))
+    email_sender.send_email(email, subject, message)
+    values = {'data': "sent"}
+    return jsonify(values)
+
 
 def define_params_database_query():
     """
@@ -160,8 +174,8 @@ def define_params_database_query():
 def extract_points_from_query_result(data):
     """
     Creates a list of dictionaries containing 'lat', 'long' and 'text'
-    :param data:
-    :return:
+    :param data: pymongo.cursor.Cursor
+    :return:List<Dictionary<string:string>>
     """
     points = []
     for record in data:
@@ -196,8 +210,8 @@ def setup_dates_for_query(number_from_scrollbar):
     """
     Sets up a date range in relation to the position of time filter scrollbar.
     Range between start and end date should always be five days.
-    :param number_from_scrollbar:
-    :return: start date and end date
+    :param number_from_scrollbar: int
+    :return: start date and end date: int, int
     """
     date_format = "%Y%m%d"
     if number_from_scrollbar == 1:

@@ -627,3 +627,8 @@ body.loading .loadingImage {
 	font-weight: 900;
 	font-size: 20px;
 }
+
+#messageStatus {
+	float:left;
+	display:none;
+}
