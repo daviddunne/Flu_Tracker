@@ -199,7 +199,6 @@ $(document).ready(function() {
 
 $(document).ready(function(){
     document.getElementById("time_filter").value = 1;
-    updateMapOnSliderChange();
 });
 
 //========================================================================================
