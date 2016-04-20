@@ -12,6 +12,7 @@ from utilities.database_handler import DatabaseHandler
 from utilities.validator import ValidatorClass
 from utilities import logger
 from utilities.geolocation_finder import GeolocationFinder
+from utilities import email_sender
 
 
 # Set authentication variables
@@ -188,9 +189,9 @@ def runDataCollector():
             i -= 1
             time.sleep(1)
         twitterStream.filter(track=keyword_list)
-    # except Exception:
-    #     print('Unknown exception occurred when running tweepy')
-    #     logger.logging.critical('Unknown exception occurred when running tweepy')
+    except:
+        logger.logging.critical('Unknown exception occurred when running tweepy')
+        email_sender.send_email("Flu-Traker-Alert", "ALERT", "Data Collector has stopped working");
 
 if __name__ == '__main__':
     runDataCollector()

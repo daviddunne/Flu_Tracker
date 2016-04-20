@@ -1,4 +1,6 @@
-<!--  Author: David Dunne,    Student Number: C00173649, Created Nov 2015 -->
+<!--  Author: David Dunne,    Student Number: C00173649, Created Nov 2015
+      Note: this file is a Bootstrap template designed by Robert Berki and coded by Jenn Pereira
+      but modified by the project author  -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -97,7 +99,7 @@
     <div id="tf-home" class="text-center">
         <div class="overlay">
             <div class="content">
-                <h1>Welcome to <strong><span class="color">Flu_TrakR</span></strong></h1>
+                <h1>Welcome to <strong><span class="color">Flu-TrakR</span></strong></h1>
                 <p class="lead">Tracking <strong>Influenza</strong> Using <strong>Twitter</strong></p>
                 <a href="#tf-about" class="fa fa-angle-down page-scroll"></a>
             </div>
@@ -256,21 +258,22 @@
                             <small><em>We value any input or ideas you may have to share.
                                         Please feel free to contact us with any suggestions you may have.</em></small>
                         </div> <!-- end section-title center -->
-                        <form>
+                        <form id="contactForm">
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="exampleInputEmail1">Email address</label>
-                                        <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
-                                    </div> <!-- end form-group -->
+                                        <label for="inputEmail">Email</label>
+                                        <input type="email" class="form-control" id="inputEmail" placeholder="Enter a valid email address" required >
+                                    </div>
                                 </div> <!-- end col-md-6 -->
                             </div> <!-- end row -->
                             <div class="form-group">
-                                <label for="exampleInputEmail">Message</label>
-                                <textarea id="exampleInputEmail" class="form-control" rows="3"></textarea>
+                                <label for="inputMessage">Message</label>
+                                <textarea id="inputMessage" class="form-control" rows="3" required></textarea>
                             </div> <!-- end for-group -->
 
-                            <button type="submit" class="btn tf-btn btn-default">Submit</button>
+                            <button type="button" id="submitMsgBtn" onclick="checkForm()" class="btn tf-btn btn-default">Submit</button>
+                            <div id="messageStatus">Message Sent!</div>
                         </form> <!-- end form -->
                     </div> <!-- end col-md-8 col-md-offset-2 -->
                 </div> <!-- end row -->
@@ -286,9 +289,6 @@
             </div>
             <div class="pull-right fnav">
                 <ul class="footer-social">
-                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                    <li><a href="#"><i class="fa fa-dribbble"></i></a></li>
-                    <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
                     <li><a href="#"><i class="fa fa-twitter"></i></a></li>
                 </ul>
             </div> <!-- end pull-right fnav -->
@@ -309,5 +309,8 @@
    <!-- ================================================== -->
     <script type="text/javascript" src="{{ url_for('static', filename='js/main.js')}}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrapAlertCreator.js')}}"></script>
+    <!--<script type="text/javascript" src="{{ url_for('static', filename ='js/map/google_heat_map.js')}}"></script>-->
+    <script src = "static/js/mail/mail.js"></script>
+
   </body>
 </html>
